@@ -1,0 +1,43 @@
+GET http://localhost:3000/api/pacientes
+
+###
+GET http://localhost:3000/api/pacientes/5a064777-4cd8-4af6-ba40-d8ba4889d884
+
+
+###
+POST http://localhost:3000/api/pacientes
+Content-Type: application/json
+
+{
+    "nombre": "Enzo",
+    "apellido":"Manavella",
+    "dni":"45906709",
+    "fechaNacimiento":"11/10/2003",
+    "obraSocial":"Swiss Medical",
+    "telefono": "341339088",
+    "email":"enzomanavella@gmail.com",
+    "password":"contaseña",
+    "estado":"activo"
+}
+
+
+###
+PUT http://localhost:3000/api/pacientes/711472de-d0e8-4e3a-9e95-5959479035f4
+Content-Type: application/json
+
+{
+    "nombre": "Facundo",
+    "apellido":"Morresi",
+    "dni":"45864009",
+    "fechaNacimiento":"24/11/2003",
+    "obraSocial":"Swiss Medical",
+    "telefono": "3329339061",
+    "email":"facum@gmail.com",
+    "password":"facumorresi",
+    "estado":"activo"
+    
+}
+
+
+###
+DELETE http://localhost:3000/api/pacientes/e03f4c90-ff48-4dd7-af3f-9d76df7a79e4
