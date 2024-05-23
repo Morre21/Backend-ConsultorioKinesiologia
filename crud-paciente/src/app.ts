@@ -44,6 +44,9 @@ function sanitizeCharacterInput(req: Request, _res: Response, next: NextFunction
   next()
 }
 
+app.get ('/api/pacientes',(req,res) => {
+  res.json(pacientes)
+})
 
 app.get('/api/pacientes/:id', (req, res) => {
   const paciente = pacientes.find((paciente) => paciente.id === req.params.id);
@@ -53,7 +56,7 @@ app.get('/api/pacientes/:id', (req, res) => {
   res.json ({data: paciente});
 });
 
-app.post('/api/pacientes', sanitizeCharacterInput, (req, res) => {
+/*app.post('/api/pacientes', sanitizeCharacterInput, (req, res) => {
   const paciente = new Paciente(
     req.body.sanitizedInput.nombre,
     req.body.sanitizedInput.apellido,
@@ -68,6 +71,15 @@ app.post('/api/pacientes', sanitizeCharacterInput, (req, res) => {
   pacientes.push(paciente);
  return res.status(201).send({message: 'Paciente creado', data: paciente});
 });
+*/
+app.post('/api/pacientes', sanitizeCharacterInput, (req, res) =>{
+  const input = req.body.sanitizedInput
+
+  const paciente = new Paciente (input.nombre, input.apellido, input.dni, input.fechaNacimiento, input.obraSocial, input.telefono, input.email, input.password,input.estado)
+
+  pacientes.push(paciente)
+  return res.status(201).send({ message:'paciente', data: paciente})
+} )
 
 app.put('/api/pacientes/:id', sanitizeCharacterInput, (req, res) => {
   const pacienteIdx = pacientes.findIndex((paciente) => paciente.id === req.params.id);
