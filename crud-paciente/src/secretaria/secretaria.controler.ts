@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { SecretariaRepository } from './secretaria.repository.js'
 import { Secretaria } from './secretaria.entity.js'
+import { orm } from '../shared/db/orm.js'
 
-const repository = new SecretariaRepository()
+const em = orm.em
 
-function sanitizeCharacterInput(req: Request, res: Response, next: NextFunction) {
+function sanitizeSecretariaInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     apellido: req.body.apellido,
@@ -12,6 +12,7 @@ function sanitizeCharacterInput(req: Request, res: Response, next: NextFunction)
     contraseña: req.body.contraseña,
     telefono: req.body.telefono,
     dni: req.body.dni,
+    consultorio: req.body.consultorio,
     
   }
   //more checks here
@@ -25,53 +26,54 @@ function sanitizeCharacterInput(req: Request, res: Response, next: NextFunction)
 }
 
 async function findAll(req: Request, res: Response) {
-  res.json({ data: await repository.findAll() })
+  try {
+    const secretarias = await em.find(Secretaria, {}, { populate: ['consultorio'] })
+    res.status(200).json({ message: 'Todas las secretarias encontradas', data: secretarias })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 async function findOne(req: Request, res: Response) {
-  const id = req.params.id
-  const secretaria = await repository.findOne({ id })
-  if (!secretaria) {
-    return res.status(404).send({ message: 'Secretiaria not found' })
+  try {
+    const id = Number.parseInt(req.params.id)
+    const secretaria = await em.findOneOrFail( Secretaria, { id }, { populate: ['consultorio'] })
+    res.status(200).json({ message: 'Secretaria encontrada con exito', data: secretaria })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
   }
-  res.json({ data: secretaria })
 }
 
 async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput
-
-  const secretariaInput = new Secretaria(
-    input.nombre,
-    input.apellido,
-    input.mail,
-    input.contraseña,
-    input.telefono,
-    input.dni,
-  )
-
-  const secretaria = await repository.add(secretariaInput)
-  return res.status(201).send({ message: 'Secretaria created', data: secretaria })
+  try {
+    const secretaria = em.create(Secretaria, req.body.sanitizedInput)
+    await em.flush()
+    res.status(201).json({ message: 'Secretaria creada exitosamente', data: secretaria })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 async function update(req: Request, res: Response) {
-  const secretaria = await repository.update(req.params.id,req.body.sanitizedInput)
-
-  if (!secretaria) {
-    return res.status(404).send({ message: 'Secretaria not found' })
+  try {
+    const id = Number.parseInt(req.params.id)
+    const secretariaToUpdate = await em.findOneOrFail(Secretaria, { id })
+    em.assign(secretariaToUpdate, req.body.sanitizedInput)
+    await em.flush()
+    res.status(200).json({ message: 'Secretaria modificada exitosamente', data: secretariaToUpdate })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
   }
-
-  return res.status(200).send({ message: 'Secretaria updated successfully', data: secretaria })
 }
 
 async function remove(req: Request, res: Response) {
-  const id = req.params.id
-  const secretaria = await repository.delete({ id })
-
-  if (!secretaria) {
-    res.status(404).send({ message: 'Secretaria not found' })
-  } else {
-    res.status(200).send({ message: 'Secretaria deleted successfully' })
+  try {
+    const id = Number.parseInt(req.params.id)
+    const secretaria = em.getReference(Secretaria, id)
+    await em.removeAndFlush(secretaria)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
   }
 }
 
-export { sanitizeCharacterInput, findAll, findOne, add, update, remove }
+export { sanitizeSecretariaInput, findAll, findOne, add, update, remove }
