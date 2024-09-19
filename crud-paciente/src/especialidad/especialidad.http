@@ -1,0 +1,52 @@
+### GET ALL
+GET http://localhost:3000/api/kinesiologos/especialidades
+
+### POST
+# @name createEspecialidad
+POST http://localhost:3000/api/kinesiologos/especialidades
+Content-Type: application/json
+
+{
+    "nombre": "Traumatología",
+}
+
+
+### POST 2
+POST http://localhost:3000/api/kinesiologos/especialidades
+Content-Type: application/json
+
+{
+    "nombre": "Deporte",
+}
+
+
+###ID
+@id = {{createEspecialidad.response.body.data.id}}
+
+
+### GET ONE
+GET http://localhost:3000/api/kinesiologos/especialidades/{{id}}
+
+
+
+### PUT
+PUT http://localhost:3000/api/kinesiologos/especialidades/{{id}}
+Content-Type: application/json
+
+{
+    "nombre": "Neurología",
+}
+
+
+### POST CHARACTER TO DELETE
+# @name createEspecialidadToDelete
+POST http://localhost:3000/api/kinesiologos/especialidades
+Content-Type: application/json
+
+{
+    "nombre": "Estética",
+}
+
+### DELETE
+@idToDelete = {{createEspecialidadToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/kinesiologos/especialidades/{{idToDelete}}

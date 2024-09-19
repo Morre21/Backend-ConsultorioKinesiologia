@@ -1,5 +1,5 @@
 import { MikroORM } from '@mikro-orm/core'
-import { MongoHighlighter } from '@mikro-orm/mongo-highlighter'
+import { SqlHighlighter } from '@mikro-orm/sql-highlighter'
 
 export const orm = await MikroORM.init({
   entities: ['dist/**/*.entity.js'],
@@ -7,7 +7,7 @@ export const orm = await MikroORM.init({
   dbName: 'consultorio',
   type: 'mysql',
   clientUrl: 'mysql://gonz:gonz@localhost:3306/consultorio',
-  highlighter: new MongoHighlighter(),
+  highlighter: new SqlHighlighter(),
   debug: true,
   schemaGenerator: {
     //never in production

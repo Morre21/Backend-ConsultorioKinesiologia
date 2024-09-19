@@ -1,88 +1,79 @@
-import { Request, Response, NextFunction } from "express"
-import { KinesiologoRepository } from "./kinesiologo.repository.js"
-import { Kinesiologo } from "./kinesiologo.entity.js"
+import { Request, Response, NextFunction } from 'express'
+import { Kinesiologo } from './kinesiologo.entity.js'
+import { orm } from '../shared/db/orm.js'
 
-//El controler tiene toda la lógica de negocio 
-const repository = new KinesiologoRepository()
+const em = orm.em
 
-function sanitizeKinesiologoInput(req: Request, res: Response, next: NextFunction){
-   
-    req.body.sanitizedInput = {
+function sanitizeKinesiologoInput(req: Request, res: Response, next: NextFunction) {
+  req.body.sanitizedInput = {
         nombre: req.body.nombre,
-        especialidad: req.body.especialidad,
         apellido: req.body.apellido,
         dni: req.body.dni,
         matricula: req.body.matricula,
         mail: req.body.mail,
         telefono: req.body.telefono,
         password: req.body.password,
+        especialidad: req.body.especialidad,
+  }
+  
+
+  Object.keys(req.body.sanitizedInput).forEach((key) => {
+    if (req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key]
     }
-    Object.keys(req.body.sanitizedInput).forEach((key)=>{
-        if(req.body.sanitizedInput[key]===undefined){
-            delete req.body.sanitizedInput[key]
-        }
-    })
-    next()
+  })
+  next()
 }
 
-async function findAll (req: Request,res: Response) {
-    res.json({data: await repository.findAll()})
+async function findAll(req: Request, res: Response) {
+  try {
+    const kinesiologos = await em.find(Kinesiologo, {}, { populate: ['especialidad'] })
+    res.status(200).json({ message: 'Todos los kinesiologos encontrados', data: kinesiologos })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-async function findOne (req: Request,res: Response){
-    // lo que hago en las lineas de abajo es pasarle un objeto
-    const id= req.params.id
-    const kinesiologo = await repository.findOne({id})
-    if(!kinesiologo){
-        return res.status(404).send({ message:'kinesiologo not found'})
-       
-    }
-    res.json({data:kinesiologo})
+async function findOne(req: Request, res: Response) {
+  try {
+    const id = Number.parseInt(req.params.id)
+    const kinesiologos = await em.findOneOrFail( Kinesiologo, { id }, { populate: ['especialidad'] })
+    res.status(200).json({ message: 'Kinesiologo encontrado con exito', data: kinesiologos })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-async function add (req: Request, res: Response) {
-    const input = req.body.sanitizedInput
+async function add(req: Request, res: Response) {
+  try {
+    const kinesiologo = em.create(Kinesiologo, req.body.sanitizedInput)
+    await em.flush()
+    res.status(201).json({ message: 'Kinesiologo creado exitosamente', data: kinesiologo })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
 
-    const kinesiologoInput = new Kinesiologo (
-        input.nombre, 
-        input.especialidad, 
-        input.apellido, 
-        input.dni, 
-        input.matricula, 
-        input.mail, 
-        input.telefono,
-        input.password
-    )
-    const kinesiologo= await repository.add(kinesiologoInput)
-    return res.status(201).send({ message:'kinesiologo created', data: kinesiologo})
-} 
-
-async function update (req: Request, res: Response) {
-    const kinesiologo= await repository.update(req.params.id, req.body.sanitizedInput)
-    
-    if(!kinesiologo){
-        return res.status(404).send({message: 'kinesiologo not found'})
-    }
-
-    return res.status(200).send({message: 'kinesiologo updated successfully', data: kinesiologo })
+async function update(req: Request, res: Response) {
+  try {
+    const id = Number.parseInt(req.params.id)
+    const kinesiologoToUpdate = await em.findOneOrFail(Kinesiologo, { id })
+    em.assign(kinesiologoToUpdate, req.body.sanitizedInput)
+    await em.flush()
+    res.status(200).json({ message: 'Kinesiologo modificado exitosamente', data: kinesiologoToUpdate })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 async function remove(req: Request, res: Response) {
-    const id=req.params.id
-    const kinesiologo = await repository.delete({id})
-
-    if(!kinesiologo){
-        res.status(404).send({message: 'kinesiologo not found'})
-    } else{
-    res.status(200).send({message: 'kinesiologo deleted successfully'})
-    }
+  try {
+    const id = Number.parseInt(req.params.id)
+    const kinesiologo = em.getReference(Kinesiologo, id)
+    await em.removeAndFlush(kinesiologo)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
-/*Podría crear un objeto con todas estas funciones a exportar, así:
-
-export const controler = {
-    sanitizeCharacterInput,
-    findAll, 
-    findOne,
-} */
-export {sanitizeKinesiologoInput, findAll, findOne, add, update, remove}
+export { sanitizeKinesiologoInput, findAll, findOne, add, update, remove } 

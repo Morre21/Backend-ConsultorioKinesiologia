@@ -19,6 +19,11 @@ Content-Type: application/json
     "password": "aRospej241"
 }
 
+
+### ID
+@id = {{createKinesiologo.response.body.data.id}} 
+
+
 ### modificar un kinesiologo PUT
 PUT http://localhost:3000/api/kinesiologos/6698453b55c972c8d0c4e49e
 Content-Type: application/json
@@ -35,7 +40,7 @@ Content-Type: application/json
 }
 
 ### modificar un kinesiologo PATCH
-PATCH http://localhost:3000/api/kinesiologos/6698453b55c972c8d0c4e49e
+PATCH http://localhost:3000/api/kinesiologos/{{idToDelete}}
 Content-Type: application/json
 
 {
@@ -43,4 +48,108 @@ Content-Type: application/json
 }
 
 ### borrar un kinesiologo
-DELETE http://localhost:3000/api/kinesiologos/6698453b55c972c8d0c4e49e
+@idToDelete = {{createKinesiologoToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/kinesiologos/{{idToDelete}}
+
+
+
+
+
+
+
+
+
+
+
+### obtener todos los kinesiologos
+GET http://localhost:3000/api/kinesiologo
+
+
+### crear un nuevo kinesiologo
+# @name createKinesiologo
+POST http://localhost:3000/api/kinesiologos
+Content-Type: application/json
+
+{
+    "nombre": "Ramiro",
+    "especialidad": "Deporte",
+    "apellido": "Parisi",
+    "dni": 44291893,
+    "matricula": 51035,
+    "mail": "ramaparisi264@gmail.com",
+    "telefono": 543415961381,
+    "password": "aRospej241"
+}
+
+### POST a kinesiologo
+POST http://localhost:3000/api/kinesiologos
+Content-Type: application/json
+
+{
+    "nombre": "Enzo",
+    "especialidad": "Pediatría",
+    "apellido": "Manavella",
+    "dni": 44594305,
+    "matricula": 51040,
+    "mail": "emanavella@gmail.com",
+    "telefono": 543415961365,
+    "password": "veNatuEr423"
+}
+
+
+### ID
+@id = {{createKinesiologo.response.body.data.id}}
+
+### GET one kinesiologo
+http://localhost:3000/api/kinesiologos/{{id}}
+
+
+### PUT a kinesiologo
+PUT http://localhost:3000/api/kinesiologos/{{id}}
+Content-Type: application/json
+
+{
+    "nombre": "Ramiro",
+    "especialidad": "Ergonomía",
+    "apellido": "Parisi",
+    "dni": 44291893,
+    "matricula": 51035,
+    "mail": "ramaparisi264@gmail.com",
+    "telefono": 543415961381,
+    "password": "aRospej241"
+}
+
+
+
+### POST a kinesiologo
+# @name createKinesiologoToDelete
+POST http://localhost:3000/api/kinesiologos
+Content-Type: application/json
+
+{
+    "nombre": "Facundo",
+    "especialidad": "Neurología",
+    "apellido": "Morresi",
+    "dni": 43491793,
+    "matricula": 50470,
+    "mail": "facumorresi21@gmail.com",
+    "telefono": 543411231381,
+    "password": "sanPeDRO534"
+}
+
+
+### DELETE a character
+@idToDelete = {{createKinesiologoToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/kinesiologos/{{idToDelete}}
+
+
+### PATCH a character
+PATCH http://localhost:3000/api/kinesiologos/{{idToDelete}}
+Content-Type: application/json
+
+{
+  "telefono": 543414578730,
+}
+
+### DELETE a character
+DELETE http://localhost:3000/api/kinesiologos/{{idToDelete}}
