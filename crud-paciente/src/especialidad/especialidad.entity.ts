@@ -8,6 +8,6 @@ export class Especialidad extends BaseEntity{
   nombre !: string
   @OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, {
     cascade: [Cascade.ALL],
-})
-kinesiologo = new Collection<Kinesiologo>(this)
+  })
+  kinesiologo = new Collection<Kinesiologo>(this)
 }
