@@ -1,12 +1,11 @@
-### obtener todos los kinesiologos
-GET http://localhost:3000/api/turnos/pacientes
+GET http://localhost:3000/api/pacientes
 
 ###
-GET http://localhost:3000/api/turnos/pacientes/da32350a-e479-495b-a5bc-82466deb1538
+GET http://localhost:3000/api/pacientes/da32350a-e479-495b-a5bc-82466deb1538
 
 
 ###
-POST http://localhost:3000/api/turnos/pacientes
+POST http://localhost:3000/api/pacientes
 Content-Type: application/json
 
 {
@@ -23,7 +22,7 @@ Content-Type: application/json
 
 
 ###
-PUT http://localhost:3000/api/turnos/pacientes/da32350a-e479-495b-a5bc-82466deb1538
+PUT http://localhost:3000/api/pacientes/da32350a-e479-495b-a5bc-82466deb1538
 Content-Type: application/json
 
 {
@@ -41,4 +40,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/turnos/pacientes/458f0caa-34cf-45f5-a863-d2da6d82b94e
+DELETE http://localhost:3000/api/pacientes/458f0caa-34cf-45f5-a863-d2da6d82b94e

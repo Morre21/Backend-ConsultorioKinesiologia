@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express"
-import { TurnoRepository } from "./turno.repository.js"
 import { Turno } from "./turno.entity.js"
+import { orm } from '../shared/db/orm.js'
 
-const repository = new TurnoRepository()
+
+const em = orm.em
 
 function sanitizeTurnoInput(req: Request, res: Response, next: NextFunction){
    
@@ -11,6 +12,9 @@ function sanitizeTurnoInput(req: Request, res: Response, next: NextFunction){
         hora: req.body.hora,
         estado: req.body.estado,
         importeTotal: req.body.importeTotal,
+        paciente: req.body.paciente,
+        kinesiologo: req.body.kinesiologo,
+        tipoAtencion: req.body.tipoAtencion,
     }
     Object.keys(req.body.sanitizedInput).forEach((key)=>{
         if(req.body.sanitizedInput[key]===undefined){
@@ -21,45 +25,54 @@ function sanitizeTurnoInput(req: Request, res: Response, next: NextFunction){
 }
 
 async function findAll (req: Request,res: Response) {
-    res.json({data: await repository.findAll()})
+   try{
+       const turnos = await em.find(Turno, {}), {populate: ['paciente', 'kinesiologo', 'tipoAtencion']}
+       res.status(200).json({message: 'Todos los turnos encontrados', data: turnos})
+   } catch (error: any){        
+       res.status(500).json({message: error.message})
+   }
 }
 
 async function findOne (req: Request,res: Response){
-    const id= req.params.id
-    const turno = await repository.findOne({id})
-    if(!turno){
-        return res.status(404).send({ message:'Turno not found'})
-       
+    try{
+        const id = Number.parseInt(req.params.id)
+        const turno = await em.findOneOrFail(Turno, {id}, {populate: ['paciente', 'kinesiologo', 'tipoAtencion']})
+        res.status(200).json({message: 'Turno encontardo con exito', data: turno})
+    } catch (error: any){
+        res.status(500).json({message: error.message})
     }
-    res.json({data:turno})
 }
 
 async function add (req: Request, res: Response) {
-    const {fecha, hora, estado, importeTotal,} = req.body
-    const turnoImput = new Turno (fecha, hora, estado, importeTotal,)
-
-    const newTurno = await repository.add(turnoImput)
-    res.status(201).send({message: "Turno created ", data: newTurno})
+    try{
+        const turno = em.create(Turno, req.body.sanitizedInput)
+        await em.flush()
+        res.status(201).json({message: 'Turno creado exitosamente', data: turno})
+    } catch (error: any){
+        res.status(500).json({message: error.message})
+    }
 } 
 
 async function update (req: Request, res: Response) {
-    const turno= await repository.update(req.params.id, req.body.sanitizedInput)
-    
-    if(!turno){
-        return res.status(404).send({message: 'Turno not found'})
+    try{
+        const id = Number.parseInt(req.params.id)
+        const turnoToUpdate = await em.findOrFail(Turno, {id})
+        em.assign(turnoToUpdate, req.body.sanitizedInput)
+        await em.flush()
+        res.status(200).json({message: 'Turno modificado exitosamente', data: turnoToUpdate})
+    } catch (error: any){
+        res.status(500).json({message: error.message})
     }
-
-    return res.status(200).send({message: 'Turno updated successfully', data: turno })
 }
 
 async function remove(req: Request, res: Response) {
-    const id = req.params.id
-    const turno = await repository.delete({id})
-
-    if(!turno){
-        res.status(404).send({message: 'turno not found'})
-    } else{
-    res.status(200).send({message: 'turno deleted successfully'})
+    try{
+        const id = Number.parseInt(req.params.id)
+        const turno = em.getReference(Turno, id)
+        await em.removeAndFlush(turno)
+        res.status(200).send({message: 'Turno borrado exitosamente'})
+    } catch (error: any){
+        res.status(500).json({message: error.message})
     }
 }
 

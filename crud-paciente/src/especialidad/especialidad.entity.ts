@@ -9,5 +9,5 @@ export class Especialidad extends BaseEntity{
   @OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, {
     cascade: [Cascade.ALL],
   })
-  kinesiologo = new Collection<Kinesiologo>(this)
+  Kinesiologos = new Collection<Kinesiologo>(this)
 }

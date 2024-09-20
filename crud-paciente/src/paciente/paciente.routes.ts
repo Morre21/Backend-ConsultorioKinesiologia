@@ -1,6 +1,6 @@
 //Acá hacemos una especie de índice por cada módulo
 import { Router } from "express";
-import { sanitizePacienteInput, findAll, findOne, add, update, remove} from "./paciente.controler.js";
+import {findAll, findOne, add, update, remove} from "./paciente.controler.js";
 
 export const pacienteRouter = Router()
 
@@ -9,8 +9,7 @@ De esta manera no queda atada y podemos utilizar la ruta que necesitemos en app.
 */
 pacienteRouter.get('/', findAll)
 pacienteRouter.get('/:id', findOne)
-pacienteRouter.post('/', sanitizePacienteInput, add)
-pacienteRouter.put('/:id', sanitizePacienteInput, update)
-pacienteRouter.patch('/:id', sanitizePacienteInput, update)
+pacienteRouter.post('/',add)
+pacienteRouter.put('/:id',update)
 pacienteRouter.delete('/:id', remove)
 

@@ -2,6 +2,7 @@ import { Entity, Property, ManyToOne, Collection, Cascade, Rel } from "@mikro-or
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Especialidad } from "../especialidad/especialidad.entity.js";
 import { Consultorio } from '../consultorio/consultorio.entity.js';
+import { Turno } from '../turnos/turno.entity.js';
 
 @Entity()
 export class Kinesiologo extends BaseEntity{
@@ -21,4 +22,8 @@ export class Kinesiologo extends BaseEntity{
   especialidad !:Rel<Especialidad>
   @ManyToOne(() => Consultorio, {nullable: false })
   consultorio !: Rel<Consultorio>
+  @OneToOMany(() => Turno, (turno) => turno.kinesiologo, {
+  cascade: [Cascade.ALL],
+  turnos = new Collection<Turno>(this)
+})
 }

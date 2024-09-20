@@ -1,9 +1,9 @@
 ### GET ALL
-GET http://localhost:3000/api/secretarias/consultorios
+GET http://localhost:3000/api/consultorios
 
 ### POST
 # @name createConsultorio
-POST http://localhost:3000/api/secretarias/consultorios
+POST http://localhost:3000/api/consultorios
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 
 
 ### POST 2
-POST http://localhost:3000/api/secretarias/consultorios
+POST http://localhost:3000/api/consultorios
 Content-Type: application/json
 
 {
@@ -27,12 +27,12 @@ Content-Type: application/json
 
 
 ### GET ONE
-GET http://localhost:3000/api/secretarias/consultorios/{{id}}
+GET http://localhost:3000/api/consultorios/{{id}}
 
 
 
 ### PUT
-PUT http://localhost:3000/api/secretarias/consultorios/{{id}}
+PUT http://localhost:3000/api/consultorios/{{id}}
 Content-Type: application/json
 
 {
@@ -43,7 +43,7 @@ Content-Type: application/json
 
 ### POST CHARACTER TO DELETE
 # @name createConsultorioToDelete
-POST http://localhost:3000/api/secretarias/consultorios
+POST http://localhost:3000/api/consultorios
 Content-Type: application/json
 
 {
@@ -53,4 +53,4 @@ Content-Type: application/json
 
 ### DELETE
 @idToDelete = {{createConsultorioToDelete.response.body.data.id}}
-DELETE http://localhost:3000/api/secretarias/consultorios/{{idToDelete}}
+DELETE http://localhost:3000/api/consultorios/{{idToDelete}}
