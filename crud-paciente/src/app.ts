@@ -7,7 +7,8 @@ import { secretariaRouter } from './secretaria/secretaria.routes.js';
 import { kinesiologoRouter } from './kinesiologo/kinesiologo.routes.js';
 import { turnoRouter } from './turnos/turno.routes.js';
 import { consultorioRouter } from './consultorio/consultorio.routes.js';
-
+import { precioRouter } from './precio/precio.routes.js';
+import { tipoatencionRouter } from './tipoAtencion/ta.routes.js';
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,8 @@ app.use ('/api/kinesiologos', kinesiologoRouter)
 app.use('/api/secretarias', secretariaRouter)
 app.use('/api/secretarias/consultorios', consultorioRouter)
 app.use('/api/pacientes', pacienteRouter)
+app.use('/api/tiposDeAtencion', tipoatencionRouter)
+app.use('/api/precios', precioRouter)
 
 app.use((_req, res) => {
 return res.status(404).send({message: 'Ruta no encontrada'});
