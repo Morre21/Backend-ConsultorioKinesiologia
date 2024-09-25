@@ -25,12 +25,12 @@ function sanitizeTurnoInput(req: Request, res: Response, next: NextFunction){
 }
 
 async function findAll (req: Request,res: Response) {
-   try{
-       const turnos = await em.find(Turno, {}), {populate: ['paciente', 'kinesiologo', 'tipoAtencion']}
-       res.status(200).json({message: 'Todos los turnos encontrados', data: turnos})
-   } catch (error: any){        
-       res.status(500).json({message: error.message})
-   }
+    try{
+        const turnos = await em.find(Turno, {}, { populate: ['paciente', 'kinesiologo', 'tipoAtencion'] });
+        res.status(200).json({message: 'Todos los turnos encontrados', data: turnos})
+    } catch (error: any){        
+        res.status(500).json({message: error.message})
+    }
 }
 
 async function findOne (req: Request,res: Response){
@@ -56,7 +56,7 @@ async function add (req: Request, res: Response) {
 async function update (req: Request, res: Response) {
     try{
         const id = Number.parseInt(req.params.id)
-        const turnoToUpdate = await em.findOrFail(Turno, {id})
+        const turnoToUpdate = await em.findOneOrFail(Turno, {id})
         em.assign(turnoToUpdate, req.body.sanitizedInput)
         await em.flush()
         res.status(200).json({message: 'Turno modificado exitosamente', data: turnoToUpdate})

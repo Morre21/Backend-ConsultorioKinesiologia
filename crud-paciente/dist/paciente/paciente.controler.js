@@ -1,67 +1,57 @@
-import { PacienteRepository } from "./paciente.repository.js";
 import { Paciente } from "./paciente.entity.js";
-//El controler tiene toda la lógica de negocio 
-const repository = new PacienteRepository();
-function sanitizePacienteInput(req, res, next) {
-    req.body.sanitizedInput = {
-        nombre: req.body.nombre,
-        apellido: req.body.apellido,
-        dni: req.body.dni,
-        fechaNacimiento: req.body.fechaNacimiento,
-        email: req.body.email,
-        telefono: req.body.telefono,
-        password: req.body.password,
-        obraSocial: req.body.obraSocial,
-        estado: req.body.estado
-    };
-    Object.keys(req.body.sanitizedInput).forEach((key) => {
-        if (req.body.sanitizedInput[key] === undefined) {
-            delete req.body.sanitizedInput[key];
-        }
-    });
-    next();
-}
+import { orm } from '../shared/db/orm.js';
+const em = orm.em;
 async function findAll(req, res) {
-    res.json({ data: await repository.findAll() });
+    try {
+        const pacientes = await em.find(Paciente, {});
+        res.status(200).json({ message: 'Todos los pacientes encontrados', data: pacientes });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 async function findOne(req, res) {
-    // lo que hago en las lineas de abajo es pasarle un objeto
-    const id = req.params.id;
-    const paciente = await repository.findOne({ id });
-    if (!paciente) {
-        return res.status(404).send({ message: 'paciente not found' });
+    try {
+        const id = Number.parseInt(req.params.id);
+        const paciente = await em.findOneOrFail(Paciente, { id });
+        res.status(200).json({ message: 'Paciente encontrado exitosamente', data: paciente });
     }
-    res.json({ data: paciente });
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 async function add(req, res) {
-    const input = req.body.sanitizedInput;
-    const pacienteInput = new Paciente(input.nombre, input.apellido, input.dni, input.fechaNacimiento, input.email, input.telefono, input.password, input.estado, input.obraSocial);
-    const paciente = await repository.add(pacienteInput);
-    return res.status(201).send({ message: 'paciente created', data: paciente });
+    try {
+        const paciente = em.create(Paciente, req.body);
+        await em.flush();
+        res.status(201).json({ message: 'Paciente creado exitosamente', data: paciente });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 async function update(req, res) {
-    const paciente = await repository.update(req.params.id, req.body.sanitizedInput);
-    if (!paciente) {
-        return res.status(404).send({ message: 'paciente not found' });
+    try {
+        const id = Number.parseInt(req.params.id);
+        const paciente = em.getReference(Paciente, id);
+        em.assign(paciente, req.body);
+        await em.flush();
+        res.status(200).json({ message: 'Paciente modificado exitosamente' });
     }
-    return res.status(200).send({ message: 'paciente updated successfully', data: paciente });
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 async function remove(req, res) {
-    const id = req.params.id;
-    const paciente = await repository.delete({ id });
-    if (!paciente) {
-        res.status(404).send({ message: 'paciente not found' });
+    try {
+        const id = Number.parseInt(req.params.id);
+        const paciente = em.getReference(Paciente, id);
+        await em.removeAndFlush(paciente);
+        res.status(200).send({ message: 'Paciente borrado exitosamente' });
     }
-    else {
-        res.status(200).send({ message: 'paciente deleted successfully' });
+    catch (error) {
+        res.status(500).json({ message: error.message });
     }
 }
-/*Podría crear un objeto con todas estas funciones a exportar, así:
-
-export const controler = {
-    sanitizeCharacterInput,
-    findAll,
-    findOne,
-} */
-export { sanitizePacienteInput, findAll, findOne, add, update, remove };
+export { findAll, findOne, add, update, remove };
 //# sourceMappingURL=paciente.controler.js.map

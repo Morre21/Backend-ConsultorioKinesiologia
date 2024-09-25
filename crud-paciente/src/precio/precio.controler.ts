@@ -21,7 +21,7 @@ function sanitizePrecioInput(req: Request, res: Response, next: NextFunction) {
 
 async function findAll(req: Request, res: Response) {
   try{
-    const precio = await em.find( Precio, {populate: ['tipoAtencion' ] } )
+    const precio = await em.find( Precio,{}, {populate: ['tipoAtencion' ] } )
     res.status(200).json( {message: 'Todos los precios fueron encontrados', data: precio})
   } catch (error: any) {
     res.status(500).json({ message: error.message })

@@ -7,11 +7,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, ManyToOne } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne, OneToMany, Collection, Cascade } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Especialidad } from "../especialidad/especialidad.entity.js";
 import { Consultorio } from '../consultorio/consultorio.entity.js';
+import { Turno } from '../turnos/turno.entity.js';
 export let Kinesiologo = class Kinesiologo extends BaseEntity {
+    constructor() {
+        super(...arguments);
+        this.turnos = new Collection(this);
+    }
 };
 __decorate([
     Property({ nullable: false }),
@@ -45,6 +50,10 @@ __decorate([
     ManyToOne(() => Consultorio, { nullable: false }),
     __metadata("design:type", Object)
 ], Kinesiologo.prototype, "consultorio", void 0);
+__decorate([
+    OneToMany(() => Turno, turno => turno.kinesiologo, { cascade: [Cascade.ALL] }),
+    __metadata("design:type", Object)
+], Kinesiologo.prototype, "turnos", void 0);
 Kinesiologo = __decorate([
     Entity()
 ], Kinesiologo);

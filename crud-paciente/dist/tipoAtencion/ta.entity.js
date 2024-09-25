@@ -9,22 +9,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Entity, Property, Collection, Cascade, OneToMany } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { Kinesiologo } from "../kinesiologo/kinesiologo.entity.js";
-export let Especialidad = class Especialidad extends BaseEntity {
+import { Turno } from "../turnos/turno.entity.js";
+import { Precio } from "../precio/precio.entity.js";
+export let TipoAtencion = class TipoAtencion extends BaseEntity {
     constructor() {
         super(...arguments);
-        this.Kinesiologos = new Collection(this);
+        this.Turnos = new Collection(this);
+        this.Precios = new Collection(this);
     }
 };
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Especialidad.prototype, "nombre", void 0);
+], TipoAtencion.prototype, "nombre", void 0);
 __decorate([
-    OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, { cascade: [Cascade.ALL], }),
+    Property({ nullable: false }),
+    __metadata("design:type", Boolean)
+], TipoAtencion.prototype, "estado", void 0);
+__decorate([
+    OneToMany(() => Turno, (turno) => turno.tipoAtencion, { cascade: [Cascade.ALL], }),
     __metadata("design:type", Object)
-], Especialidad.prototype, "Kinesiologos", void 0);
-Especialidad = __decorate([
+], TipoAtencion.prototype, "Turnos", void 0);
+__decorate([
+    OneToMany(() => Precio, (precio) => precio.tipoAtencion, { cascade: [Cascade.ALL], }),
+    __metadata("design:type", Object)
+], TipoAtencion.prototype, "Precios", void 0);
+TipoAtencion = __decorate([
     Entity()
-], Especialidad);
-//# sourceMappingURL=especialidad.entity.js.map
+], TipoAtencion);
+//# sourceMappingURL=ta.entity.js.map

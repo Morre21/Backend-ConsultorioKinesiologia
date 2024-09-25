@@ -7,24 +7,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, Collection, Cascade, OneToMany } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { Kinesiologo } from "../kinesiologo/kinesiologo.entity.js";
-export let Especialidad = class Especialidad extends BaseEntity {
-    constructor() {
-        super(...arguments);
-        this.Kinesiologos = new Collection(this);
-    }
+import { TipoAtencion } from "../tipoAtencion/ta.entity.js";
+export let Precio = class Precio extends BaseEntity {
 };
 __decorate([
     Property({ nullable: false }),
-    __metadata("design:type", String)
-], Especialidad.prototype, "nombre", void 0);
+    __metadata("design:type", Date)
+], Precio.prototype, "fechaDesde", void 0);
 __decorate([
-    OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, { cascade: [Cascade.ALL], }),
+    Property({ nullable: false }),
+    __metadata("design:type", Number)
+], Precio.prototype, "importe", void 0);
+__decorate([
+    ManyToOne(() => TipoAtencion, { nullable: false }),
     __metadata("design:type", Object)
-], Especialidad.prototype, "Kinesiologos", void 0);
-Especialidad = __decorate([
+], Precio.prototype, "tipoAtencion", void 0);
+Precio = __decorate([
     Entity()
-], Especialidad);
-//# sourceMappingURL=especialidad.entity.js.map
+], Precio);
+//# sourceMappingURL=precio.entity.js.map

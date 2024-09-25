@@ -11,6 +11,7 @@ function sanitizeKinesiologoInput(req, res, next) {
         telefono: req.body.telefono,
         password: req.body.password,
         especialidad: req.body.especialidad,
+        consultorio: req.body.consultorio,
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -21,7 +22,7 @@ function sanitizeKinesiologoInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const kinesiologos = await em.find(Kinesiologo, {}, { populate: ['especialidad'] });
+        const kinesiologos = await em.find(Kinesiologo, {}, { populate: ['especialidad', 'consultorio'] });
         res.status(200).json({ message: 'Todos los kinesiologos encontrados', data: kinesiologos });
     }
     catch (error) {
@@ -31,7 +32,7 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const kinesiologos = await em.findOneOrFail(Kinesiologo, { id }, { populate: ['especialidad'] });
+        const kinesiologos = await em.findOneOrFail(Kinesiologo, { id }, { populate: ['especialidad', 'consultorio'] });
         res.status(200).json({ message: 'Kinesiologo encontrado con exito', data: kinesiologos });
     }
     catch (error) {
