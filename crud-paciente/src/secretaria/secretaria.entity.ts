@@ -4,18 +4,25 @@ import { Consultorio } from "./consultorio.entity.js";
 
 @Entity()
 export class Secretaria extends BaseEntity{
+
   @Property({ nullable:false })
-  nombre !: string
+  nombre!: string
+
   @Property({ nullable:false })
-  apellido !: string
+  apellido!: string
+
+  @Property({ nullable:false, unique: true })
+  mail!: string //Hay que ver la validacion del mail
+
   @Property({ nullable:false })
-  mail !: string
+  contraseña!: string  // Asergurar la contraseña para mas seguridad 'hash'
+
   @Property({ nullable:false })
-  contraseña !: string
-  @Property({ nullable:false })
-  telefono !: number
-  @Property({ nullable:false })
-  dni  !: number
+  telefono!: number
+
+  @Property({ nullable:false, unique: true })
+  dni!: number
+
   @ManyToOne(() => Consultorio, {nullable: false })
-  consultorio !: Rel<Consultorio>
+  consultorio!: Rel<Consultorio>
 }

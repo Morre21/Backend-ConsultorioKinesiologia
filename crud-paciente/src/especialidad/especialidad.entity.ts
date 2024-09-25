@@ -4,10 +4,11 @@ import { Kinesiologo } from "../kinesiologo/kinesiologo.entity.js";
 
 @Entity()
 export class Especialidad extends BaseEntity{
+
   @Property({ nullable:false })
-  nombre !: string
-  @OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, {
-    cascade: [Cascade.ALL],
-  })
-  Kinesiologos = new Collection<Kinesiologo>(this)
+  nombre !: string;
+
+  @OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, {cascade: [Cascade.ALL],})
+  Kinesiologos = new Collection<Kinesiologo>(this);
+  
 }
