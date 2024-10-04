@@ -4,6 +4,24 @@ import { Especialidad } from './especialidad.entity.js'
 
 const em = orm.em
 
+const especialidades = [
+    { nombre: 'Deportologo' },
+    { nombre: 'Osteopata' },
+    { nombre: 'Traumatologia' },
+    { nombre: 'Estética' },
+  ];
+
+
+async function DefinoEspecialidades() {
+  for (const especialidad of especialidades) {
+    const existe = await em.findOne(Especialidad, { nombre: especialidad.nombre });
+    if (!existe) {
+      em.create(Especialidad, especialidad);
+    }
+  }
+  await em.flush();
+}
+
 async function findAll(req: Request, res: Response) {
   try{
     const especialidad = await em.find( Especialidad, {} )
@@ -56,4 +74,4 @@ async function remove(req: Request, res: Response) {
   } 
 }
 
-export { findAll, findOne, add, update, remove }
+export { findAll, findOne, add, update, remove, DefinoEspecialidades }

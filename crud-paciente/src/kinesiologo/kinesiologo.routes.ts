@@ -1,15 +1,23 @@
-//Acá hacemos una especie de índice por cada módulo
-import { Router } from 'express';
+import { Router,} from 'express';
 import { sanitizeKinesiologoInput, findAll, findOne, add, update, remove} from "./kinesiologo.controler.js";
+import { validateKinesiologo } from './kinesiologo.validator.js'; 
+import { validarErrores } from '../middlewares/validacionErrores.js';
+import { manejoErrores } from '../middlewares/manejoErrores.js';
 
-export const kinesiologoRouter = Router()
+const kinesiologoRouter = Router();
 
-/*Le definimos el directorio raiz, porque si queremos hacer una modificación.
-De esta manera no queda atada y podemos utilizar la ruta que necesitemos en app.ts 
-*/
+// Acá definimos las rutas para cada método del controlador
 kinesiologoRouter.get('/', findAll)
 kinesiologoRouter.get('/:id', findOne)
-kinesiologoRouter.post('/',sanitizeKinesiologoInput, add)
-kinesiologoRouter.put('/:id',sanitizeKinesiologoInput, update)
-kinesiologoRouter.patch('/:id',sanitizeKinesiologoInput, update)
+kinesiologoRouter.post('/', validateKinesiologo, validarErrores, sanitizeKinesiologoInput, add)
+kinesiologoRouter.put('/:id', validateKinesiologo, validarErrores, sanitizeKinesiologoInput, update)
+kinesiologoRouter.patch('/:id', validateKinesiologo, validarErrores, sanitizeKinesiologoInput, update)
 kinesiologoRouter.delete('/:id', remove)
+
+import { Request, Response, NextFunction } from 'express';
+
+kinesiologoRouter.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  manejoErrores(err, req, res, next);
+});
+
+export {kinesiologoRouter};

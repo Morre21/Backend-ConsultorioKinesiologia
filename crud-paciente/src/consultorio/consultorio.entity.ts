@@ -19,10 +19,10 @@ import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js'
   
     @OneToMany(() => Secretaria, (secretaria) => secretaria.consultorio, {
       cascade: [Cascade.ALL],
-      Secretarias = new Collection<Secretaria>(this)
     })
+      secretarias = new Collection<Secretaria>(this);
     @OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.consultorio, {
       cascade: [Cascade.ALL],
-      Kinesiologos = new Collection<Kinesiologo>(this)
-    })
-  }
+  })
+      Kinesiologos = new Collection<Kinesiologo>(this);
+  }  

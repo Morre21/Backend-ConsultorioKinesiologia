@@ -4,6 +4,26 @@ import { TipoAtencion } from './ta.entity.js'
 
 const em = orm.em
 
+const atenciones = [
+  { nombre: 'Osteopatia', estado: true },
+  { nombre: 'Rehabilitación osea', estado: true },
+  { nombre: 'Rehabilitacion muscular', estado: true },
+  { nombre: 'Estética', estado: true },
+  { nombre: 'Entrenamiento', estado: true },
+];
+
+
+async function DefinoAtenciones() {
+  for (const tipoAtencion of atenciones) {
+    const existe = await em.findOne(TipoAtencion, { nombre: tipoAtencion.nombre });
+    if (!existe) {
+      em.create(TipoAtencion, tipoAtencion);
+    }
+  }
+  await em.flush();
+}
+
+
 async function findAll(req: Request, res: Response) {
   try{
     const tipoatencion = await em.find( TipoAtencion, {} )
@@ -56,4 +76,4 @@ async function remove(req: Request, res: Response) {
   } 
 }
 
-export { findAll, findOne, add, update, remove }
+export { findAll, findOne, add, update, remove, DefinoAtenciones }

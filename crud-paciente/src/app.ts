@@ -9,6 +9,9 @@ import { turnoRouter } from './turnos/turno.routes.js';
 import { consultorioRouter } from './consultorio/consultorio.routes.js';
 import { precioRouter } from './precio/precio.routes.js';
 import { tipoatencionRouter } from './tipoAtencion/ta.routes.js';
+import { DefinoEspecialidades } from './especialidad/especialidad.controler.js';
+import { DefinoAtenciones } from './tipoAtencion/ta.controler.js';
+
 
 const app = express();
 app.use(express.json());
@@ -29,12 +32,11 @@ app.use('/api/pacientes', pacienteRouter)
 app.use('/api/tiposDeAtencion', tipoatencionRouter)
 app.use('/api/precios', precioRouter)
 
-app.use((req, res) => {
-return res.status(404).send({message: 'Ruta no encontrada'});
-});
 
 await syncSchema() //never in production
+await DefinoEspecialidades();
+await DefinoAtenciones();
 
 app.listen(PORT, () => {
-  console.log('Server is running on http://localhost ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
