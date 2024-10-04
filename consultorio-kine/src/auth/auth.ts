@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-const saltRounds = 10; // Puedes ajustar esto según tus necesidades
+const saltRounds = 10; 
 
 export async function hashPassword(password: string): Promise<string> {
     const hash = await bcrypt.hash(password, saltRounds);
