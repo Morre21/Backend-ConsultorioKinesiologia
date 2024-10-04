@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
-import { PacienteRepository } from "./paciente.repository.js"
 import { Paciente } from "./paciente.entity.js"
+import { orm } from "../shared/db/orm.js"
 
 const em = orm.em
 

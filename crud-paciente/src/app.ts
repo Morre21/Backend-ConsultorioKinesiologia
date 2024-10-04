@@ -13,6 +13,7 @@ import { tipoatencionRouter } from './tipoAtencion/ta.routes.js';
 const app = express();
 app.use(express.json());
 
+const PORT = process.env.PORT ?? 3000;
 //luego de los middlewares base
 
 app.use((req, res, next) => {
@@ -28,12 +29,12 @@ app.use('/api/pacientes', pacienteRouter)
 app.use('/api/tiposDeAtencion', tipoatencionRouter)
 app.use('/api/precios', precioRouter)
 
-app.use((_req, res) => {
+app.use((req, res) => {
 return res.status(404).send({message: 'Ruta no encontrada'});
 });
 
 await syncSchema() //never in production
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000/');
+app.listen(PORT, () => {
+  console.log('Server is running on http://localhost ${PORT}`);
 });

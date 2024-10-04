@@ -1,36 +1,37 @@
-import { Entity, Property, ManyToOne, Collection, Cascade, Rel, OneToMany } from "@mikro-orm/core";
+import { Entity, Property,  Collection, Cascade, Rel, OneToMany } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Turno } from "../turnos/turno.entity.js";
 
-@Entity
+@Entity()
 export class Paciente extends BaseEntity {
     @Property({ nullable: false })
-     nombre!:string, 
+     nombre!:string
 
     @Property({ nullable: false })
-     apellido!:string, 
+     apellido!:string
 
     @Property({ nullable: false })
-     dni!:number,
+     dni!:number
 
     @Property({ nullable: false })
-     fechaNacimiento!:number,
-    @Property({ nullable: false })
-     email!:string,
+     fechaNacimiento!:number
 
     @Property({ nullable: false })
-     telefono!:number,
+     email!:string
+
+    @Property({ nullable: false })
+     telefono!:number
 
      @Property({ nullable: false })
-     password!: string,
+     password!: string
 
      @Property({ nullable: false })
-     estado!: string,
+     estado!: string
 
     @Property({ nullable: false })
-     obraSocial!: string,
+     obraSocial!: string
 
-    @OneToMany(() => Turno, (turno) => turno.paciente)
+    @OneToMany(() => Turno, (turno) => turno.paciente, {
         cascade: [Cascade.ALL],
     })
     Turnos = new Collection<Turno>(this)

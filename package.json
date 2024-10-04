@@ -1,0 +1,10 @@
+{
+	"devDependencies": {
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.7.4"
+	},
+	"dependencies": {
+		"@mikro-orm/core": "^6.3.12",
+		"express": "^4.21.0"
+	}
+}

@@ -1,4 +1,4 @@
-import { Entity, Property, ManyToOne, Collection, Cascade, Rel } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne, Collection, Cascade, Rel, OneToMany } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Especialidad } from "../especialidad/especialidad.entity.js";
 import { Consultorio } from '../consultorio/consultorio.entity.js';
@@ -22,8 +22,8 @@ export class Kinesiologo extends BaseEntity{
   especialidad !:Rel<Especialidad>
   @ManyToOne(() => Consultorio, {nullable: false })
   consultorio !: Rel<Consultorio>
-  @OneToOMany(() => Turno, (turno) => turno.kinesiologo, {
+  @OneToMany(() => Turno, (turno) => turno.kinesiologo, {
   cascade: [Cascade.ALL],
-  turnos = new Collection<Turno>(this)
-})
+  })
+  Turnos = new Collection<Turno>(this)
 }

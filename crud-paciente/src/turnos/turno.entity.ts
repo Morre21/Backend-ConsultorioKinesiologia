@@ -1,9 +1,8 @@
 import {
     Entity,
-    OneToMany,
+    ManyToOne,
     Property,
-    Cascade,
-    Collection,
+    Rel
   } from '@mikro-orm/core'
   import { BaseEntity } from '../shared/db/baseEntity.entity.js'
   import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js'
@@ -11,26 +10,26 @@ import {
   import { TipoAtencion } from '../tipoAtencion/ta.entity.js'
 
 @Entity()
-export class Turno{
-    constructor(
+export class Turno extends BaseEntity {
         @Property({nullable: false}) 
-        fecha:string, 
+        fecha!:string
 
         @Property({nullable: false}) 
-        hora:string,
+        hora!:string
 
         @Property({nullable: false}) 
-        estado:string, 
+        estado!:string
 
         @Property({nullable: false}) 
-        importeTotal:number, 
+        importeTotal!:number
 
         @ManyToOne(() => Paciente, {nullable: false})
-    )   {}
+        paciente!: Rel<Paciente>
 
         @ManyToOne(() => Kinesiologo, {nullable: false})
-    )   {}
+        kinesiologo !: Rel<Kinesiologo>   
           
         @ManyToOne(() => TipoAtencion, {nullable: false})
-    )   {}
-}
+        tipoAtencion !: Rel <TipoAtencion>
+    }
+

@@ -1,6 +1,6 @@
-import { Entity, Property, ManyToOne, Collection, Cascade, Rel } from "@mikro-orm/core";
+import { Entity, Property, ManyToOne,  Rel } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { Consultorio } from "./consultorio.entity.js";
+import { Consultorio } from "../consultorio/consultorio.entity.js";
 
 @Entity()
 export class Secretaria extends BaseEntity{
