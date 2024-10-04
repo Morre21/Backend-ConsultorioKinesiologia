@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login, logout } from '../kinesiologo/kinesiologo.auth.controller.js'; // Asegúrate de crear este archivo
+import { login, logout } from '../kinesiologo/kinesiologo.auth.controller.js'; 
 import { validarErrores } from '../middlewares/validacionErrores.js';
 
 const authRouter = Router();
