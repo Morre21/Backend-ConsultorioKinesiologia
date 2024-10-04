@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { findAll, findOne, add, update, remove } from './especialidad.controler.js'
+import { findAll, findOne, add, update, remove } from './especialidad.controller.js'
 import { validateEspecialidad } from './especialidad.validator.js'
 import { validarErrores } from '../middlewares/validacionErrores.js'
 

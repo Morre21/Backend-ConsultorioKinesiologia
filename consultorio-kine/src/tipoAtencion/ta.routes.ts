@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { findAll, findOne, add, update, remove } from './ta.controler.js'
+import { findAll, findOne, add, update, remove } from './ta.controller.js'
 import { validateTipoAtencion } from './ta.validator.js'
 import { validarErrores } from '../middlewares/validacionErrores.js'
 

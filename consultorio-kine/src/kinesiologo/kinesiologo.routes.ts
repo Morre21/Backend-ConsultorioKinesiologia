@@ -1,5 +1,5 @@
 import { Router,} from 'express';
-import { sanitizeKinesiologoInput, findAll, findOne, add, update, remove} from "./kinesiologo.controler.js";
+import { sanitizeKinesiologoInput, findAll, findOne, add, update, remove} from "./kinesiologo.controller.js";
 import { validateKinesiologo } from './kinesiologo.validator.js'; 
 import { validarErrores } from '../middlewares/validacionErrores.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';

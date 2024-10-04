@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { sanitizePrecioInput, findAll, findOne, add, update, remove } from './precio.controler.js'
+import { sanitizePrecioInput, findAll, findOne, add, update, remove } from './precio.controller.js'
 import { validarErrores } from '../middlewares/validacionErrores.js'
 import { validatePrecio } from './precio.validator.js'
 

@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {sanitizedInput,findAll, findOne, add, update, remove} from './dispo.controler.js';
+import {sanitizedInput,findAll, findOne, add, update, remove} from './dispo.controller.js';
 import {validateDispo} from './dispo.validator.js';
 import {validarErrores} from '../middlewares/validacionErrores.js';
 import {manejoErrores} from '../middlewares/manejoErrores.js';

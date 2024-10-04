@@ -1,6 +1,6 @@
 //Acá hacemos una especie de índice por cada módulo
 import { Router } from "express";
-import {findAll, findOne, add, update, remove} from "./paciente.controler.js";
+import {findAll, findOne, add, update, remove} from "./paciente.controller.js";
 import { validatePaciente } from "./paciente.validator.js";
 import { validarErrores } from "../middlewares/validacionErrores.js";
 import { manejoErrores } from "../middlewares/manejoErrores.js";

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { Kinesiologo } from './kinesiologo.entity.js'
 import { orm } from '../shared/db/orm.js'
+import { hashPassword } from '../auth/auth.js'
 
 const em = orm.em
 
@@ -47,8 +48,13 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const kinesiologo = em.create(Kinesiologo, req.body.sanitizedInput)
-    await em.flush()
+    const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
+    const kinesiologoData =  {
+    ...req.body.sanitizedInput,
+      password: hashedPassword};
+
+    const kinesiologo = em.create(Kinesiologo, kinesiologoData);
+    await em.flush();
     res.status(201).json({ message: 'Kinesiologo creado exitosamente', data: kinesiologo })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
