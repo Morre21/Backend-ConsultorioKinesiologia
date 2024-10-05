@@ -13,7 +13,7 @@ import { Kinesiologo } from "../kinesiologo/kinesiologo.entity.js";
 export let Especialidad = class Especialidad extends BaseEntity {
     constructor() {
         super(...arguments);
-        this.kinesiologo = new Collection(this);
+        this.Kinesiologos = new Collection(this);
     }
 };
 __decorate([
@@ -25,7 +25,7 @@ __decorate([
         cascade: [Cascade.ALL],
     }),
     __metadata("design:type", Object)
-], Especialidad.prototype, "kinesiologo", void 0);
+], Especialidad.prototype, "Kinesiologos", void 0);
 Especialidad = __decorate([
     Entity()
 ], Especialidad);

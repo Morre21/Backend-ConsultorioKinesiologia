@@ -25,7 +25,7 @@ function sanitizeTurnoInput(req: Request, res: Response, next: NextFunction){
     next();
 }
 
-async function findAll (req: Request,res: Response) {
+async function findAll (req: Request,res: Response): Promise<void>  {
    try{
        const turnos = await em.find(Turno, {}, {populate: ['paciente', 'kinesiologo', 'tipoAtencion']})
        res.status(200).json({message: 'Todos los turnos encontrados', data: turnos})
@@ -34,7 +34,7 @@ async function findAll (req: Request,res: Response) {
    }
 }
 
-async function findOne (req: Request,res: Response){
+async function findOne (req: Request,res: Response): Promise<void> {
     try{
         const id = Number.parseInt(req.params.id)
         const turno = await em.findOneOrFail(Turno, {id}, {populate: ['paciente', 'kinesiologo', 'tipoAtencion']})
@@ -44,19 +44,21 @@ async function findOne (req: Request,res: Response){
     }
 }
 
-async function add (req: Request, res: Response) {
+async function add (req: Request, res: Response): Promise<void>  {
     try{
         const {fecha, horaDesde, kinesiologo, tipoAtencion} =  req.body.sanitizedInput;
         
         const existeTurno = await em.findOne(Turno, {fecha, horaDesde, kinesiologo});
         if (existeTurno){
-            return res.status(400).json({message: 'Ya existe un turno para ese kinesiologo en ese horario'});
+          res.status(400).json({message: 'Ya existe un turno para ese kinesiologo en ese horario'});
+          return
         }
 
         
         const disponibilidad = await em.findOne(Disponibilidad, {fecha, horaDesde, kinesiologo, tipoAtencion});
         if (!disponibilidad){
-            return res.status(400).json({message: 'Turno no disponible'});
+          res.status(400).json({message: 'Turno no disponible'});
+          return
         }
         
         const turno = em.create(Turno, req.body.sanitizedInput);
@@ -67,7 +69,7 @@ async function add (req: Request, res: Response) {
     }
 } 
 
-async function update (req: Request, res: Response) {
+async function update (req: Request, res: Response): Promise<void>  {
     try{
         const id = Number.parseInt(req.params.id)
         const turnoToUpdate = await em.findOneOrFail(Turno, {id});
@@ -79,7 +81,7 @@ async function update (req: Request, res: Response) {
     }
 }
 
-async function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response): Promise<void>  {
     try{
         const id = Number.parseInt(req.params.id);
         const turno = em.getReference(Turno, id);

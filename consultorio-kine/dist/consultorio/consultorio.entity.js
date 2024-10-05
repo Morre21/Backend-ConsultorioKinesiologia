@@ -10,10 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Entity, OneToMany, Property, Cascade, Collection, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Secretaria } from '../secretaria/secretaria.entity.js';
+import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
 export let Consultorio = class Consultorio extends BaseEntity {
     constructor() {
         super(...arguments);
-        this.Secretarias = new Collection(this);
+        this.secretarias = new Collection(this);
+        this.Kinesiologos = new Collection(this);
     }
 };
 __decorate([
@@ -29,7 +31,13 @@ __decorate([
         cascade: [Cascade.ALL],
     }),
     __metadata("design:type", Object)
-], Consultorio.prototype, "Secretarias", void 0);
+], Consultorio.prototype, "secretarias", void 0);
+__decorate([
+    OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.consultorio, {
+        cascade: [Cascade.ALL],
+    }),
+    __metadata("design:type", Object)
+], Consultorio.prototype, "Kinesiologos", void 0);
 Consultorio = __decorate([
     Entity()
 ], Consultorio);

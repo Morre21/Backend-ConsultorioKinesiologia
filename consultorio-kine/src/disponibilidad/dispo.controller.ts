@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from 'express'
-import { Disponibilidad } from './dispo.entity.js'
+import { Disponibilidad } from './dispo.enitity.js'
 import { orm } from '../shared/db/orm.js'
 
 const em = orm.em

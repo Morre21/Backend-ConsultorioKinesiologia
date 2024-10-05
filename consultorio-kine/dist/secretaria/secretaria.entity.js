@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Entity, Property, ManyToOne } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { Consultorio } from "./consultorio.entity.js";
+import { Consultorio } from "../consultorio/consultorio.entity.js";
 export let Secretaria = class Secretaria extends BaseEntity {
 };
 __decorate([

@@ -4,8 +4,13 @@ export const orm = await MikroORM.init({
     entities: ['dist/**/*.entity.js'],
     entitiesTs: ['src/**/*.entity.ts'],
     dbName: 'consultorio',
-    type: 'mysql',
-    clientUrl: 'mysql://gonz:gonz@localhost:3306/consultorio',
+    driverOptions: {
+        connection: {
+            type: 'mysql', // Especifica el tipo de base de datos aquí
+        }
+    },
+    // clientUrl: 'mysql://gonz:gonz@localhost:3306/consultorio'
+    clientUrl: 'mysql://nibble:nibble@localhost:3306/consultorio',
     highlighter: new SqlHighlighter(),
     debug: true,
     schemaGenerator: {

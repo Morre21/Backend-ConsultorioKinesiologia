@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { findAll, findOne, add, update, remove } from './consultorio.controler.js';
+import { findAll, findOne, add, update, remove } from './consultorio.controller.js';
 export const consultorioRouter = Router();
 consultorioRouter.get('/', findAll);
 consultorioRouter.get('/:id', findOne);

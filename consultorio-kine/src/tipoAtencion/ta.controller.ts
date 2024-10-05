@@ -3,13 +3,13 @@ import { orm } from '../shared/db/orm.js'
 import { TipoAtencion } from './ta.entity.js'
 
 const em = orm.em
-
+// AGREGUÉ PRECIOS, PORQUE NO SE PUEDEN CREAR SI NO TIENEN PRECIO.
 const atenciones = [
-  { nombre: 'Osteopatia', estado: true },
-  { nombre: 'Rehabilitación osea', estado: true },
-  { nombre: 'Rehabilitacion muscular', estado: true },
-  { nombre: 'Estética', estado: true },
-  { nombre: 'Entrenamiento', estado: true },
+  { nombre: 'Osteopatia', estado: true , precio: 100},
+  { nombre: 'Rehabilitación osea', estado: true, precio: 200 },
+  { nombre: 'Rehabilitacion muscular', estado: true, precio: 300 },
+  { nombre: 'Estética', estado: true, precio: 400 },
+  { nombre: 'Entrenamiento', estado: true, precio: 500 },
 ];
 
 

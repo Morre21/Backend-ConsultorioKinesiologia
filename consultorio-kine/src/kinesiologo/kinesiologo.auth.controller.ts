@@ -1,28 +1,34 @@
 import { Request, Response } from 'express';
 import { Kinesiologo } from './kinesiologo.entity.js'; 
 import { orm } from '../shared/db/orm.js';
-import { hashPassword, comparePassword } from '../auth.js';
+import { hashPassword, comparePassword } from '..//auth/auth.js';
 import jwt from 'jsonwebtoken';
 
 const em = orm.em;
 
 // Función para iniciar sesión
-export async function login(req: Request, res: Response) {
+export async function login(req: Request, res: Response): Promise<void> {
   try {
     const { matricula, password } = req.body;
 
     const kinesiologo = await em.findOne(Kinesiologo, { matricula });
 
     if (!kinesiologo) {
-      return res.status(401).json({ message: ' No  valido' });
-    }
+      res.status(401).json({ message: ' No  valido' });
+      return
+  }
 
     const isPasswordValid = await comparePassword(password, kinesiologo.contraseña);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Pass no validas' });
+      res.status(401).json({ message: 'Pass no validas' });
+      return
     }
-
+    
+  // Verifica que JWT_SECRET esté definido
+    if (!process.env.JWT_SECRET) {
+      res.status(500).json({ message: 'JWT_SECRET no está definido' });
+      return}
     // Crear el token JWT
     const token = jwt.sign({ id: kinesiologo.id }, process.env.JWT_SECRET, { expiresIn: '1h' }); 
 
@@ -30,7 +36,11 @@ export async function login(req: Request, res: Response) {
     res.cookie('token', token, { httpOnly: true, secure: true }); 
     res.status(200).json({ message: 'Inicio de sesión exitoso', data: { matricula: kinesiologo.matricula } });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error desconocido' });
+    }
   }
 }
 
