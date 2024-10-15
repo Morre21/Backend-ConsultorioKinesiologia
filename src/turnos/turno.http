@@ -9,12 +9,13 @@ Content-Type: application/json
 
 {
     "fecha": "2024-11-11",
-    "hora": "18:30",
+    "hora": "18:50",
     "estado": "Activo",
     "importeTotal": 4500,
-    "paciente": 1,
+    "paciente": 2,
     "kinesiologo": 1,
-    "tipoAtencion": 2
+    "consultorio": 1,
+    "tipoAtencion": 1
 }
 
 ### POST turno 2

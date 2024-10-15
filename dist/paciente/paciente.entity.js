@@ -30,7 +30,7 @@ __decorate([
 ], Paciente.prototype, "dni", void 0);
 __decorate([
     Property({ nullable: false }),
-    __metadata("design:type", String)
+    __metadata("design:type", Date)
 ], Paciente.prototype, "fechaNacimiento", void 0);
 __decorate([
     Property({ nullable: false }),

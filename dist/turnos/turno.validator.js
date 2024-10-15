@@ -1,67 +1,55 @@
 import { body } from 'express-validator';
-import { validateTipoAtencion } from '../tipoAtencion/ta.validator';
-import { Kinesiologo } from '../kinesiologo/kinesiologo.entity';
-import { Paciente } from '../paciente/paciente.entity';
-import { orm } from '../shared/db/orm';
-import { Consultorio } from '../consultorio/consultorio.entity';
-import { Disponibilidad } from '../disponibilidad/dispo.enitity';
+import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
+import { Paciente } from '../paciente/paciente.entity.js';
+import { orm } from '../shared/db/orm.js';
+import { Turno } from './turno.entity.js';
 const em = orm.em;
 export const validateTurno = [
     body('fecha')
-        .isDate()
+        .isDate().withMessage('La fecha es incorrecta (YYY-MM-DD).')
         .notEmpty().withMessage('La fecha es obligatoria.'),
-    body('horaDesde')
+    body('hora')
+        .notEmpty().withMessage('La hora es obligatoria.')
+        .custom(async (value, { req }) => {
+        const kinesiologo = req.body.kinesiologo;
+        const fecha = req.body.fecha;
+        const turnoExistente = await em.findOne(Turno, {
+            kinesiologo: kinesiologo,
+            fecha: fecha,
+            hora: value
+        });
+        if (!turnoExistente) {
+            throw new Error('El kinesiólogo ya tiene un turno asignado en ese horario.');
+        }
+        return true;
+    }).withMessage('El kinesiólogo ya tiene un turno en el horario seleccionado.')
         .custom((value) => {
         const [hours, minutes] = value.split(':').map(Number);
         if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
             throw new Error('La hora debe estar en formato HH:mm y ser válida.');
         }
         return true;
-    })
-        .notEmpty().withMessage('La hora es obligatoria.'),
+    }),
     body('kinesiologo')
-        .isString()
+        .isInt()
         .notEmpty().withMessage('El kinesiologo es obligatorio.')
         .custom(async (value) => {
-        const existe = await em.findOne(Kinesiologo, { matricula: value });
+        const existe = await em.findOne(Kinesiologo, { id: value });
         if (!existe) {
             throw new Error('El kinesiologo no existe.');
         }
         return true;
     }),
-    ...validateTipoAtencion,
+    //...validateTipoAtencion,
     body('paciente')
-        .isString()
+        .isInt()
         .notEmpty().withMessage('El paciente es obligatorio.')
         .custom(async (value) => {
-        const existe = await em.findOne(Paciente, { dni: value });
+        const existe = await em.findOne(Paciente, { id: value });
         if (!existe) {
             throw new Error('El paciente no existe.');
         }
         return true;
     }),
-    body('consultorio')
-        .isString()
-        .notEmpty().withMessage('El consultorio es obligatorio.')
-        .custom(async (value) => {
-        const existe = await em.findOne(Consultorio, { nombre: value });
-        if (!existe) {
-            throw new Error('El consultorio no existe.');
-        }
-        return true;
-    }),
-    body('disponibilidad')
-        .custom(async (value, { req }) => {
-        const { fecha, horaDesde, kinesiologo } = req.body;
-        const disponibilidad = await em.findOne(Disponibilidad, {
-            fecha: new Date(fecha),
-            horaDesde,
-            kinesiologo: { matricula: kinesiologo },
-        });
-        if (!disponibilidad) {
-            throw new Error('La disponibilidad no existe.');
-        }
-        return true;
-    })
 ];
 //# sourceMappingURL=turno.validator.js.map

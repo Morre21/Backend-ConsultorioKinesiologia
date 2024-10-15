@@ -22,6 +22,7 @@ app.use(express.json())
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next) // em (Entity Manager)
 })
+
 //antes de las rutas y middlewares de negocio
 
 app.use('/api/consultorios', consultorioRouter)

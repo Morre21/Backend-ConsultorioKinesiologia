@@ -9,8 +9,8 @@ export const validateTipoAtencion = [
         .notEmpty().withMessage('El nombre del tipo de atención no puede estar vacío.')
         .custom(async (value) => {
         const existe = await em.findOne(TipoAtencion, { nombre: value });
-        if (!existe) {
-            throw new Error('El tipo de atención no es valido.');
+        if (existe) {
+            throw new Error('El tipo de atención ya existe.');
         }
         return true;
     }),

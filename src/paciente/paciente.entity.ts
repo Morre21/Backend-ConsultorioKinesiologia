@@ -14,7 +14,7 @@ export class Paciente extends BaseEntity {
      dni!:number
 
     @Property({ nullable: false })
-     fechaNacimiento!:string
+     fechaNacimiento!:Date
 
     @Property({ nullable: false })
      email!:string
