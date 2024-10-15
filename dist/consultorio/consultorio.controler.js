@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator';
 import { orm } from '../shared/db/orm.js';
 import { Consultorio } from './consultorio.entity.js';
 const em = orm.em;
@@ -21,6 +22,10 @@ async function findOne(req, res) {
     }
 }
 async function add(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
     try {
         const consultorio = em.create(Consultorio, req.body);
         await em.flush();

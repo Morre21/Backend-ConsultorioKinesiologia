@@ -26,13 +26,11 @@ export const validatePaciente = [
     body('obraSocial')
         .isString()
         .notEmpty().withMessage('La obra social es obligatoria.'),
+    body('fechaNacimiento')
+        .isDate().withMessage('La fecha debe ser un formato valido.')
+        .notEmpty().withMessage('La fecha no puede estar vacía.')
 ];
-/*
-body('fechaNacimiento')
-    .isDate().withMessage('La fecha debe ser un formato valido.')
-    .notEmpty().withMessage('La fecha no puede estar vacía.'),
-
-body('estado')
+/*body('estado')
   .isString().withMessage('El estado debe ser una cadena.')
   .notEmpty().withMessage('El estado es obligatorio.'),
 

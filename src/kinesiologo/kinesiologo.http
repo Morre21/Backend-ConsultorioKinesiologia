@@ -8,15 +8,15 @@ POST http://localhost:3000/api/kinesiologos
 Content-Type: application/json
 
 {
-    "matricula":"AB500",
+    "matricula":"541394092142",
     "nombre": "Ramiro",
     "apellido": "Parisi",
     "mail": "ramaparisi264@gmail.com",
-    "password": "aRospej241",
+    "password": "aRosej241",
     "telefono": 341333444 ,
     "dni": 44291893,
-    "especialidad": 1,
-    "consultorio": 1
+    "especialidad": "Traumatología",
+    "consultorio": "Musculito"
 }
 
 ### POST a kinesiologo
@@ -25,15 +25,15 @@ Content-Type: application/json
 
 {
 
-    "matricula":"AB600",
+    "matricula":"541394092146",
     "nombre": "Enzo",
     "apellido": "Manavella",
     "mail": "emanavella@gmail.com",
-    "password": "veNatuEr423",
+    "password": "veNaTuer123",
     "telefono": 341888999 ,
     "dni": 44291893,
-    "especialidad": 2,
-    "consultorio": 2
+    "especialidad": "Traumatología",
+    "consultorio": "Musculito"
 }
 
 

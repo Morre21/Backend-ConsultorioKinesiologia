@@ -16,9 +16,16 @@ POST http://localhost:3000/api/especialidades
 Content-Type: application/json
 
 {
-    "nombre": "Deporte"
+    "nombre": "Deportología"
 }
 
+### POST 3
+POST http://localhost:3000/api/especialidades
+Content-Type: application/json
+
+{
+    "nombre": "Osteopatía"
+}
 
 ###ID
 @id = {{createEspecialidad.response.body.data.id}}

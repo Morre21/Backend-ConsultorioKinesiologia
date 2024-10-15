@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import { Kinesiologo } from './kinesiologo.entity.js'
 import { orm } from '../shared/db/orm.js'
 import { hashPassword } from '../auth/auth.js'
+import { Especialidad } from '../especialidad/especialidad.entity.js'
+import { Consultorio } from '../consultorio/consultorio.entity.js'
 
 const em = orm.em
 
@@ -48,10 +50,27 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
+    // Buscar el ID de la especialidad
+    const especialidad = await em.findOne(Especialidad, { nombre: req.body.especialidad });
+    if (!especialidad) {
+      return res.status(400).json({ message: 'Especialidad no encontrada' });
+    }
+
+    // Buscar el ID del consultorio
+    const consultorio = await em.findOne(Consultorio, { nombre: req.body.consultorio });
+    if (!consultorio) {
+      return res.status(400).json({ message: 'Consultorio no encontrado' });
+    }
+
     const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
+
+    // Asigno a la constante data el hash de la contraseña, Id de especialidad y Id de consultorio
     const kinesiologoData =  {
     ...req.body.sanitizedInput,
+      consultorio: consultorio.id,
+      especialidad: especialidad.id,
       password: hashedPassword};
+    // Creo el kinesiologo pasandole como parametro la constante kinesiologoData  
     const kinesiologo = em.create(Kinesiologo, kinesiologoData);
     await em.flush();
     res.status(201).json({ message: 'Kinesiologo creado exitosamente', data: kinesiologo })

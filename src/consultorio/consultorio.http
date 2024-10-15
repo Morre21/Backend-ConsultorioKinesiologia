@@ -21,6 +21,14 @@ Content-Type: application/json
     "domicilio": "Juan Jose Paso 1500"
 }
 
+### POST 3
+POST http://localhost:3000/api/consultorios
+Content-Type: application/json
+
+{
+    "nombre": "Kinetica",
+    "domicilio": "San Martin 3000"
+}
 
 ###ID
 @id = {{createConsultorio.response.body.data.id}}

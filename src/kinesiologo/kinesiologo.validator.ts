@@ -1,7 +1,9 @@
 import { body } from 'express-validator';
-import { validateEspecialidad } from '../especialidad/especialidad.validator.js'; 
+import { Especialidad } from '../especialidad/especialidad.entity.js';
+import { Consultorio } from '../consultorio/consultorio.entity.js'; 
+import { orm } from '../shared/db/orm.js';
 
-
+const em= orm.em;
 export const validateKinesiologo = [
   body('nombre')
     .isString()
@@ -29,15 +31,40 @@ export const validateKinesiologo = [
     .isNumeric().withMessage('El teléfono debe ser un número.'),
 
   body('password')
-    .isStrongPassword({
+    .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
+    .matches(/[a-z]/).withMessage('La contraseña debe contener al menos una letra minúscula')
+    .matches(/[A-Z]/).withMessage('La contraseña debe contener al menos una letra mayúscula')
+    .matches(/\d/).withMessage('La contraseña debe contener al menos un número'),
+/*    .isStrongPassword({
       minLength: 8,
       minLowercase: 1,
       minUppercase: 1,
       minNumbers: 1,
-    })
-    .withMessage('La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número'),
+    }).withMessage('La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número'),
+*/
+    body('especialidad')
+    .isString().withMessage('La especialidad debe ser una cadena de texto.')
+    .notEmpty().withMessage('La especialidad es obligatoria.')
+    .custom(async (value) => {
+      const especialidad = await em.findOne(Especialidad, { nombre: value });
+      if (!especialidad) {
+        throw new Error('El nombre de la especialidad no es válido.');
+      }
+      return true;
+    }),
 
- ...validateEspecialidad,
+  body('consultorio')
+    .isString().withMessage('El consultorio debe ser una cadena de texto.')
+    .notEmpty().withMessage('El consultorio es obligatorio.')
+    .custom(async (value) => {
+      const consultorio = await em.findOne(Consultorio, { nombre: value });
+      if (!consultorio) {
+        throw new Error('El nombre del consultorio no es válido.');
+      }
+      return true;
+    })
+];
+ /*...validateEspecialidad,
 
   body('consultorio')
     .isString()
@@ -45,5 +72,5 @@ export const validateKinesiologo = [
 
 
 ];
-
+*/
 // ('TURNO')
