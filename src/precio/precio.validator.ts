@@ -1,7 +1,7 @@
 import {body} from 'express-validator'
 
 export const validatePrecio = [
-   body('fechaDesde')
+  body('fechaDesde')
     .isDate().withMessage('La fecha debe ser un formato valido.')
     .notEmpty().withMessage('La fecha no puede estar vacía.'),
   body('importe')

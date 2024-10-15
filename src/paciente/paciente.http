@@ -10,10 +10,10 @@ Content-Type: application/json
     "nombre": "Carlos",
     "apellido":"Manavella",
     "dni": 45392405,
-    "fechaNacimiento":"21/11/2003",
+    "fechaNacimiento":"2003-09-29",
     "email":"carlosmanavella@gmail.com",
     "telefono": 341333848,
-    "password":"cArl3os56",
+    "password":"Carlito4",
     "estado":"activo",
     "obraSocial":"Swiss Medical"
 }

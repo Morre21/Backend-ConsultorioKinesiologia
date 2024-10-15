@@ -1,9 +1,31 @@
 import { Request, Response, NextFunction } from "express"
 import { Paciente } from "./paciente.entity.js"
 import { orm } from "../shared/db/orm.js"
+import { hashPassword } from "../auth/auth.js";
 
 const em = orm.em
 
+function sanitizePacienteInput(req: Request, res: Response, next: NextFunction) {
+    req.body.sanitizedInput = {
+      nombre: req.body.nombre,
+      apellido: req.body.apellido,
+      dni: req.body.dni,
+      fechaNacimiento: req.body.fechaNacimiento,
+      email: req.body.email,
+      telefono: req.body.telefono,
+      password: req.body.password,
+      estado: req.body.estado,
+      obraSocial: req.body.obraSocial,
+    };
+  
+    Object.keys(req.body.sanitizedInput).forEach((key) => {
+      if (req.body.sanitizedInput[key] === undefined) {
+        delete req.body.sanitizedInput[key];
+      }
+    });
+  
+    next();
+  }
 
 async function findAll (req: Request,res: Response) {
  try{
@@ -26,7 +48,13 @@ async function findOne (req: Request,res: Response){
 
 async function add (req: Request, res: Response) {
     try{
-        const paciente = em.create(Paciente, req.body)
+        
+        const hashedPassword = await hashPassword(req.body.sanitizedInput.password)
+        const PacienteData = {
+            ...req.body.sanitizedInput,
+            password : hashedPassword
+        }
+        const paciente = em.create(Paciente, PacienteData)
         await em.flush()
         res.status(201).json({message: 'Paciente creado exitosamente', data: paciente})
     } catch (error: any){
@@ -38,7 +66,7 @@ async function update (req: Request, res: Response) {
     try{
         const id = Number.parseInt(req.params.id)
         const paciente = em.getReference(Paciente, id)
-        em.assign(paciente, req.body)
+        em.assign(paciente, req.body.sanitizedInput)
         await em.flush()
         res.status(200).json({message: 'Paciente modificado exitosamente'})
     } catch (error: any){
@@ -56,4 +84,4 @@ async function remove(req: Request, res: Response) {
        res.status(500).json({message: error.message})
    }
 }
-export {findAll, findOne, add, update, remove}
+export { sanitizePacienteInput ,findAll, findOne, add, update, remove}

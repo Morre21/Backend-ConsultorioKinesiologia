@@ -1,5 +1,8 @@
 import {body} from 'express-validator'
+import { orm } from '../shared/db/orm.js';
+import { Paciente } from './paciente.entity.js';
 
+const em= orm.em;
 export const validatePaciente = [
   body('nombre')
     .isString()
@@ -12,7 +15,14 @@ export const validatePaciente = [
   body('dni')
     .isNumeric()
     .isLength({min: 7, max: 8}).withMessage('El DNI debe tener entre 7 y 8 numeros.')
-    .notEmpty().withMessage('El DNI es obligatorio.'),
+    .notEmpty().withMessage('El DNI es obligatorio.')
+    .custom(async (value) => {
+      const existe = await em.findOne(Paciente, { dni: value })
+      if (existe) {
+        throw new Error('Ya existe un paciente con este DNI.')
+      }
+      return true;
+    }),
 
   body('email')
     .isEmail().withMessage('Debe proporcionar un correo válido.')
