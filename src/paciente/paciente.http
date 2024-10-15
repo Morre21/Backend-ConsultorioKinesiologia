@@ -7,13 +7,13 @@ POST http://localhost:3000/api/pacientes
 Content-Type: application/json
 
 {
-    "nombre": "Enzo",
+    "nombre": "Carlos",
     "apellido":"Manavella",
-    "dni": 45906709,
-    "fechaNacimiento":"11/10/2003",
-    "email":"enzomanavella@gmail.com",
-    "telefono": 341339088,
-    "password":"contaseña",
+    "dni": 45392405,
+    "fechaNacimiento":"21/11/2003",
+    "email":"carlosmanavella@gmail.com",
+    "telefono": 341333848,
+    "password":"cArl3os56",
     "estado":"activo",
     "obraSocial":"Swiss Medical"
 }
@@ -28,10 +28,10 @@ Content-Type: application/json
     "nombre": "Gabriel",
     "apellido":"Sandivaras",
     "dni": 46216734,
-    "fechaNacimiento":"17/11/2004",
+    "fechaNacimiento":"07/01/2004",
     "email":"gabi@gmail.com",
     "telefono": 341242424,
-    "password":"homelander",
+    "password":"8Ra35ngkdjds",
     "estado":"activo",
     "obraSocial":"OSAP"
 }

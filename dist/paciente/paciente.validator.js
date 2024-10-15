@@ -16,12 +16,10 @@ export const validatePaciente = [
     body('telefono')
         .isNumeric().withMessage('El teléfono debe ser un número.'),
     body('password')
-        .isStrongPassword({
-        minLength: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-    })
+        .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
+        .matches(/[a-z]/).withMessage('La contraseña debe contener al menos una letra minúscula')
+        .matches(/[A-Z]/).withMessage('La contraseña debe contener al menos una letra mayúscula')
+        .matches(/\d/).withMessage('La contraseña debe contener al menos un número')
         .withMessage('La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número'),
     body('obraSocial')
         .isString()
