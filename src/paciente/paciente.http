@@ -28,7 +28,7 @@ Content-Type: application/json
     "nombre": "Gabriel",
     "apellido":"Sandivaras",
     "dni": 46216734,
-    "fechaNacimiento":"07/01/2004",
+    "fechaNacimiento":"2004-01-07",
     "email":"gabi@gmail.com",
     "telefono": 341242424,
     "password":"8Ra35ngkdjds",
