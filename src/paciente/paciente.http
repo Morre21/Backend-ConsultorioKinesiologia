@@ -66,7 +66,7 @@ Content-Type: application/json
     "nombre": "Nathan",
     "apellido":"Drake",
     "dni": 66666666,
-    "fechaNacimiento":"07/07/2007",
+    "fechaNacimiento":"2007-07-07",
     "email":"nd@gmail.com",
     "telefono": 4578730,
     "password":"Elena777",
