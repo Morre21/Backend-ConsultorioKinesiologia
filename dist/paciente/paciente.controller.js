@@ -42,10 +42,15 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
+        // Verificar si el paciente ya existe
+        const existingPaciente = await em.findOne(Paciente, { dni: req.body.sanitizedInput.dni });
+        if (existingPaciente) {
+            return res.status(400).json({ message: 'El paciente ya existe' });
+        }
         const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
         const PacienteData = {
             ...req.body.sanitizedInput,
-            password: hashedPassword
+            password: hashedPassword,
         };
         const paciente = em.create(Paciente, PacienteData);
         await em.flush();

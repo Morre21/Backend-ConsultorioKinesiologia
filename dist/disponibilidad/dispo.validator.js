@@ -1,5 +1,4 @@
 import { body } from 'express-validator';
-import { validateTipoAtencion } from '../tipoAtencion/ta.validator.js';
 import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
 import { orm } from '../shared/db/orm.js';
 const em = orm.em;
@@ -47,6 +46,6 @@ export const validateDispo = [
         }
         return true;
     }),
-    ...validateTipoAtencion,
+    //...validateTipoAtencion,
 ];
 //# sourceMappingURL=dispo.validator.js.map

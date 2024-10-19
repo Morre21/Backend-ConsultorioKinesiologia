@@ -44,6 +44,11 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
+        // Verificar si el Kinesiologo ya existe
+        const existingKinesiologo = await em.findOne(Kinesiologo, { dni: req.body.sanitizedInput.dni });
+        if (existingKinesiologo) {
+            return res.status(400).json({ message: 'El Kinesiologo ya existe' });
+        }
         // Buscar el ID de la especialidad
         const especialidad = await em.findOne(Especialidad, { nombre: req.body.especialidad });
         if (!especialidad) {

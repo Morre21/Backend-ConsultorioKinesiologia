@@ -46,21 +46,30 @@ async function findOne (req: Request,res: Response){
     }
 }
 
-async function add (req: Request, res: Response) {
-    try{
-        
-        const hashedPassword = await hashPassword(req.body.sanitizedInput.password)
-        const PacienteData = {
-            ...req.body.sanitizedInput,
-            password : hashedPassword
-        }
-        const paciente = em.create(Paciente, PacienteData)
-        await em.flush()
-        res.status(201).json({message: 'Paciente creado exitosamente', data: paciente})
-    } catch (error: any){
-        res.status(500).json({message: error.message})
+async function add(req: Request, res: Response) {
+    try {
+      // Verificar si el paciente ya existe
+      const existingPaciente = await em.findOne(Paciente, { dni: req.body.sanitizedInput.dni });
+      
+      if (existingPaciente) {
+        return res.status(400).json({ message: 'El paciente ya existe' });
+      }
+  
+      const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
+      const PacienteData = {
+        ...req.body.sanitizedInput,
+        password: hashedPassword,
+      };
+  
+      const paciente = em.create(Paciente, PacienteData);
+      await em.flush();
+      
+      res.status(201).json({ message: 'Paciente creado exitosamente', data: paciente });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
-}
+  }
+  
 
 async function update (req: Request, res: Response) {
     try{

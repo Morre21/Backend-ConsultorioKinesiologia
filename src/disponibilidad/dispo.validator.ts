@@ -60,6 +60,6 @@ export const validateDispo= [
       return true;
     }),
 
- ...validateTipoAtencion,
+ //...validateTipoAtencion,
 
 ];  
