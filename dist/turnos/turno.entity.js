@@ -11,7 +11,6 @@ import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
 import { Paciente } from '../paciente/paciente.entity.js';
-import { TipoAtencion } from '../tipoAtencion/ta.entity.js';
 export let Turno = class Turno extends BaseEntity {
 };
 __decorate([
@@ -38,10 +37,6 @@ __decorate([
     ManyToOne(() => Kinesiologo, { nullable: false }),
     __metadata("design:type", Object)
 ], Turno.prototype, "kinesiologo", void 0);
-__decorate([
-    ManyToOne(() => TipoAtencion, { nullable: false }),
-    __metadata("design:type", Object)
-], Turno.prototype, "tipoAtencion", void 0);
 Turno = __decorate([
     Entity()
 ], Turno);

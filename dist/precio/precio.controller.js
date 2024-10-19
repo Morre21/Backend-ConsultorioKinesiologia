@@ -4,7 +4,7 @@ const em = orm.em;
 function sanitizePrecioInput(req, res, next) {
     req.body.sanitizedInput = {
         fechaDesde: req.body.fechaDesde,
-        tipoAtencion: req.body.tipoAtencion,
+        especialidad: req.body.especialidad,
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -16,7 +16,7 @@ function sanitizePrecioInput(req, res, next) {
 // TIPOSSSS EN VEZ DE TIPO
 async function findAll(req, res) {
     try {
-        const precio = await em.find(Precio, {}, { populate: ['tipoAtencion'] });
+        const precio = await em.find(Precio, {}, { populate: ['especialidad'] });
         res.status(200).json({ message: 'Todos los precios fueron encontrados', data: precio });
     }
     catch (error) {
@@ -26,7 +26,7 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const precio = await em.findOneOrFail(Precio, { id }, { populate: ['tipoAtencion'] });
+        const precio = await em.findOneOrFail(Precio, { id }, { populate: ['especialidad'] });
         res.status(200).json({ message: 'Precio encontrado exitosamente', data: precio });
     }
     catch (error) {

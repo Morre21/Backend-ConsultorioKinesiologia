@@ -40,7 +40,6 @@ export const validateTurno = [
         }
         return true;
     }),
-    //...validateTipoAtencion,
     body('paciente')
         .isInt()
         .notEmpty().withMessage('El paciente es obligatorio.')

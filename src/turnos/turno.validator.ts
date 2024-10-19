@@ -1,5 +1,4 @@
 import { body } from 'express-validator';
-import { validateTipoAtencion } from '../tipoAtencion/ta.validator.js';
 import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
 import { Paciente } from '../paciente/paciente.entity.js';
 import { orm } from '../shared/db/orm.js';
@@ -49,7 +48,7 @@ export const validateTurno = [
     }
     return true;
   }),
-   //...validateTipoAtencion,
+  
 
   body('paciente')
   .isInt()
