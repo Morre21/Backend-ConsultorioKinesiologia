@@ -24,5 +24,4 @@ docker run --name mongodb-dsw -v C:\Users\PC\docker-volumes\consultorio:\data\db
 
 ---------
 
-docker run --name mysql-dsw -v "C:\Users\PC\docker-volumes\consultoriomysql:\var\lib\mysql" -e MYSQL_ROOT_HOST="%" -e MYSQL_ALLOW_EMPTY_PASSWORD="yes" -e MYSQL_DATABASE="consultorio" -e MYSQL_USER="gonz" -e MYSQL_PASSWORD="gonz" -p 3306:3306 percona/percona-server
-
+docker run --name mysql-dsw -v "C:\Users\PC\docker-volumes\consultoriomysql:\var\lib\mysql" -e MYSQL_ROOT_HOST="%" -e MYSQL_ALLOW_EMPTY_PASSWORD="yes" -e MYSQL_DATABASE="consultorio" -e MYSQL_USER="nibble" -e MYSQL_PASSWORD="nibble" -p 3306:3306 percona/percona-server
