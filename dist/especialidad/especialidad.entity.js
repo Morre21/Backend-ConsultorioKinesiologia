@@ -23,6 +23,10 @@ __decorate([
     __metadata("design:type", String)
 ], Especialidad.prototype, "nombre", void 0);
 __decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", Boolean)
+], Especialidad.prototype, "estado", void 0);
+__decorate([
     OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, {
         cascade: [Cascade.ALL],
     }),
