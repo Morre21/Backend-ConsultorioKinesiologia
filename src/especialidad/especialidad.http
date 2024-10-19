@@ -2,7 +2,6 @@
 GET http://localhost:3000/api/especialidades
 
 ### POST
-# @name createEspecialidad
 POST http://localhost:3000/api/especialidades
 Content-Type: application/json
 
@@ -22,6 +21,7 @@ Content-Type: application/json
 }
 
 ### POST 3
+# @name createEspecialidad
 POST http://localhost:3000/api/especialidades
 Content-Type: application/json
 
