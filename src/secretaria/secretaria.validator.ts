@@ -19,14 +19,11 @@ export const validateSecretaria = [
     .notEmpty().withMessage('El mail es obligatorio.'),
 
   body('telefono')
-    .isNumeric().withMessage('El teléfono debe ser un número.'),
+    .isNumeric().withMessage('El teléfono debe ser númerico.'),
 
-  body('password')
-    .isStrongPassword({
-      minLength: 8,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-    })
-    .withMessage('La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número'),
+    body('contraseña')
+    .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
+    .matches(/[a-z]/).withMessage('La contraseña debe contener al menos una letra minúscula')
+    .matches(/[A-Z]/).withMessage('La contraseña debe contener al menos una letra mayúscula')
+    .matches(/\d/).withMessage('La contraseña debe contener al menos un número'),
 ];
