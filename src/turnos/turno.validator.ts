@@ -46,7 +46,7 @@ export const validateTurno = [
     }
 
     // Comprobamos si la hora del turno está dentro del rango de disponibilidad
-    if (hora < disponibilidad.horaInicio || hora > disponibilidad.horaFin) {
+    if (hora < disponibilidad.horaInicio || hora >= disponibilidad.horaFin) {
       throw new Error(`El kinesiólogo solo está disponible entre las ${disponibilidad.horaInicio} y las ${disponibilidad.horaFin}.`);
     }
 
