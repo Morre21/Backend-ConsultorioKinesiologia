@@ -1,5 +1,6 @@
 import { Disponibilidad } from './dispo.enitity.js';
 import { orm } from '../shared/db/orm.js';
+import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
 const em = orm.em;
 function sanitizedInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -37,7 +38,17 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
-        const disponibilidad = em.create(Disponibilidad, req.body.sanitizedInput);
+        // Primero, busca el kinesiólogo por su matrícula
+        const kinesiologo = await em.findOne(Kinesiologo, { matricula: req.body.sanitizedInput.kinesiologo });
+        if (!kinesiologo) {
+            return res.status(404).json({ message: 'Kinesiólogo no encontrado' });
+        }
+        // Crea un nuevo objeto con los datos de disponibilidad, reemplazando kinesiologo con la referencia encontrada
+        const disponibilidadData = {
+            ...req.body.sanitizedInput,
+            kinesiologo: kinesiologo
+        };
+        const disponibilidad = em.create(Disponibilidad, disponibilidadData);
         await em.flush();
         res.status(201).json({ message: 'Disponibilidad creada exitosamente', data: disponibilidad });
     }

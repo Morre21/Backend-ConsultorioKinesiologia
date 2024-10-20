@@ -8,8 +8,8 @@ import { Disponibilidad } from "../disponibilidad/dispo.enitity.js";
 
 @Entity()
 export class Kinesiologo extends BaseEntity{
-  @Property({ nullable:false })
-  matricula !: string
+  @Property({ nullable: false, unique: true })
+  matricula!: string
   @Property({ nullable:false })
   nombre !: string
   @Property({ nullable:false })

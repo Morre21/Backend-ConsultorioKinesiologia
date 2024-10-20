@@ -22,7 +22,7 @@ export const validateKinesiologo = [
     .isNumeric()
     .custom((value) => {if (!value.startsWith('541') ) {throw new Error('La matricula debe comenzar con 541')} return true; })  //https://express-validator.github.io/docs/guides/customizing
     .isLength({min: 11, max: 12})
-    .notEmpty().withMessage('La matrícula es obligatoria.'),
+    .notEmpty().withMessage('La matrícula es obligatoria.'), //"541394092142"
 
   body('mail')
     .isEmail().withMessage('Debe proporcionar un correo válido.'),

@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
     "fecha": "2024-11-11",
-    "hora": "17:00",
+    "hora": "13:00",
     "estado": "Activo",
     "importeTotal": 4500,
     "paciente": 2,
