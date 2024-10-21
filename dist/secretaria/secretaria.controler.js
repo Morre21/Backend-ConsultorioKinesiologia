@@ -1,5 +1,6 @@
 import { Secretaria } from './secretaria.entity.js';
 import { orm } from '../shared/db/orm.js';
+import { hashPassword } from '../auth/auth.js';
 const em = orm.em;
 function sanitizeSecretariaInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -40,7 +41,19 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
-        const secretaria = em.create(Secretaria, req.body.sanitizedInput);
+        // Verificar si el Secretaria ya existe
+        const existingSecretaria = await em.findOne(Secretaria, { dni: req.body.sanitizedInput.dni });
+        if (existingSecretaria) {
+            return res.status(400).json({ message: 'El Secretaria ya existe' });
+        }
+        const hashedPassword = await hashPassword(req.body.sanitizedInput.contraseña);
+        // Asigno a la constante data el hash de la contraseña
+        const secretarialogoData = {
+            ...req.body.sanitizedInput,
+            contraseña: hashedPassword
+        };
+        // Creo secretaria pasandole como parametro la constante secretarialogoData 
+        const secretaria = em.create(Secretaria, secretarialogoData);
         await em.flush();
         res.status(201).json({ message: 'Secretaria creada exitosamente', data: secretaria });
     }

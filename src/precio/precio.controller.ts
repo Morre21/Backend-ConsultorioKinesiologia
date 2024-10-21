@@ -7,7 +7,7 @@ const em = orm.em
 function sanitizePrecioInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
         fechaDesde: req.body.fechaDesde,
-        tipoAtencion: req.body.tipoAtencion,
+        especialidad: req.body.especialidad,
   }
   
 
@@ -21,7 +21,7 @@ function sanitizePrecioInput(req: Request, res: Response, next: NextFunction) {
 // TIPOSSSS EN VEZ DE TIPO
 async function findAll(req: Request, res: Response) {
   try{
-    const precio = await em.find( Precio, {}, {populate: ['tipoAtencion' ] } )
+    const precio = await em.find( Precio, {}, {populate: ['especialidad' ] } )
     res.status(200).json( {message: 'Todos los precios fueron encontrados', data: precio})
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -31,7 +31,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const precio = await em.findOneOrFail(Precio, { id }, {populate: ['tipoAtencion']})
+    const precio = await em.findOneOrFail(Precio, { id }, {populate: ['especialidad']})
     res.status(200).json({ message: 'Precio encontrado exitosamente', data: precio })
   } catch (error: any) {
     res.status(500).json({ message: error.message })

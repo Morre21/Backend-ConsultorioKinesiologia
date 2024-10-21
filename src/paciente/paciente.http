@@ -1,4 +1,4 @@
-### obtener todos los kinesiologos
+### obtener todos los pacientes
 GET http://localhost:3000/api/pacientes
 
 

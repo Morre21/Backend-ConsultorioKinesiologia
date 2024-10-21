@@ -9,12 +9,12 @@ Content-Type: application/json
 
 {
     "fecha": "2024-11-11",
-    "hora": "18:50",
+    "hora": "18:00",
     "estado": "Activo",
     "importeTotal": 4500,
     "paciente": 2,
     "kinesiologo": 1,
-    "tipoAtencion": 1
+    "consultorio": 1
 }
 
 ### POST turno 2
@@ -23,12 +23,11 @@ Content-Type: application/json
 
 {
     "fecha": "2024-12-17",
-    "hora": "17:00",
+    "hora": "16:00",
     "estado": "Activo",
     "importeTotal": 5500,
     "paciente": 2,
-    "kinesiologo": 2,
-    "tipoAtencion": 1
+    "kinesiologo": 2
 }
 
 
@@ -64,8 +63,7 @@ Content-Type: application/json
     "estado": "Inactivo",
     "importeTotal": 1500,
     "paciente": 2,
-    "kinesiologo": 1,
-    "tipoAtencion": 1
+    "kinesiologo": 1
 }
 
 

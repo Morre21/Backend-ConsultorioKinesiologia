@@ -9,7 +9,7 @@ Content-Type: application/json
 {
     "fechaDesde": "2024-06-19",
     "importe": "5000",
-    "tipoAtencion": 1
+    "especialidad": 1
 }
 
 
@@ -20,7 +20,7 @@ Content-Type: application/json
 {
     "fechaDesde": "2024-06-19",
     "importe": "4000",
-    "tipoAtencion": 4
+    "especialidad": 4
 }
 
 
@@ -51,7 +51,7 @@ Content-Type: application/json
 {
     "fechaDesde": "2024-09-10",
     "importe": "9000",
-    "tipoAtencion": 1
+    "especialidad": 1
 }
 
 ### DELETE

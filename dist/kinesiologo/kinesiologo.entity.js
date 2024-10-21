@@ -21,7 +21,7 @@ export let Kinesiologo = class Kinesiologo extends BaseEntity {
     }
 };
 __decorate([
-    Property({ nullable: false }),
+    Property({ nullable: false, unique: true }),
     __metadata("design:type", String)
 ], Kinesiologo.prototype, "matricula", void 0);
 __decorate([

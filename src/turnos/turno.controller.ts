@@ -14,7 +14,6 @@ function sanitizeTurnoInput(req: Request, res: Response, next: NextFunction){
         importeTotal: req.body.importeTotal,
         paciente: req.body.paciente,
         kinesiologo: req.body.kinesiologo,
-        tipoAtencion: req.body.tipoAtencion,
     };
     Object.keys(req.body.sanitizedInput).forEach((key)=>{
         if(req.body.sanitizedInput[key]===undefined){
@@ -26,7 +25,7 @@ function sanitizeTurnoInput(req: Request, res: Response, next: NextFunction){
 
 async function findAll (req: Request,res: Response): Promise<void>  {
    try{
-       const turnos = await em.find(Turno, {}, {populate: ['paciente', 'kinesiologo', 'tipoAtencion']})
+       const turnos = await em.find(Turno, {}, {populate: ['paciente', 'kinesiologo']})
        res.status(200).json({message: 'Todos los turnos encontrados', data: turnos})
    } catch (error: any){        
        res.status(500).json({message: error.message})
@@ -36,7 +35,7 @@ async function findAll (req: Request,res: Response): Promise<void>  {
 async function findOne (req: Request,res: Response): Promise<void> {
     try{
         const id = Number.parseInt(req.params.id)
-        const turno = await em.findOneOrFail(Turno, {id}, {populate: ['paciente', 'kinesiologo', 'tipoAtencion']})
+        const turno = await em.findOneOrFail(Turno, {id}, {populate: ['paciente', 'kinesiologo']})
         res.status(200).json({message: 'Turno encontardo con exito', data: turno})
     } catch (error: any){
         res.status(500).json({message: error.message})

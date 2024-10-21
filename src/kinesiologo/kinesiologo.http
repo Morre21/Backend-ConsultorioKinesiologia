@@ -25,13 +25,13 @@ Content-Type: application/json
 
 {
 
-    "matricula":"541394092146",
+    "matricula":"541394092111",
     "nombre": "Enzo",
     "apellido": "Manavella",
     "mail": "emanavella@gmail.com",
     "password": "veNaTuer123",
     "telefono": 341888999 ,
-    "dni": 44291893,
+    "dni": 44666777,
     "especialidad": "Traumatología",
     "consultorio": "Musculito"
 }
