@@ -15,25 +15,18 @@ export const validateTurno = [
         const kinesiologo = req.body.kinesiologo;
         const fechaString = req.body.fecha;
         const hora = value;
-        // Convierte la fecha y hora en un objeto Date completo
+        // Convierte la fecha de string a Date
         const fecha = new Date(fechaString);
-        const horaInicioNueva = new Date(`${fechaString}T${hora}`);
-        const horaFinNueva = new Date(horaInicioNueva);
-        horaFinNueva.setHours(horaInicioNueva.getHours() + 1); // Duración del turno es 1 hora
-        // Verifica si ya existe un turno que se solape con el nuevo turno
-        const turnoSolapado = await em.findOne(Turno, {
+        const diaSemana = fecha.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
+        // Verifica si ya existe un turno con el mismo kinesiólogo, fecha y hora
+        const turnoExistente = await em.findOne(Turno, {
             kinesiologo: kinesiologo,
             fecha: fecha,
-            $or: [
-                { hora: { $gte: hora, $lt: horaFinNueva.toTimeString().slice(0, 5) } },
-                { hora: { $lt: hora, $gte: new Date(horaInicioNueva.setHours(horaInicioNueva.getHours() - 1)).toTimeString().slice(0, 5) } } // Turno existente termina después del nuevo turno
-            ]
+            hora: hora
         });
-        // Si existe un turno solapado, se lanza un error
-        if (turnoSolapado) {
-            throw new Error('Ya existe un turno dentro de la misma franja horaria.');
+        if (turnoExistente) {
+            throw new Error('El kinesiólogo ya tiene un turno asignado en ese horario.');
         }
-        const diaSemana = fecha.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
         // Buscamos la disponibilidad del kinesiólogo para el día de la semana del turno
         const disponibilidad = await em.findOne(Disponibilidad, {
             kinesiologo: kinesiologo,

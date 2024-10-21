@@ -10,8 +10,8 @@ function sanitizeSecretariaInput(req, res, next) {
     req.body.sanitizedInput = {
         nombre: req.body.nombre,
         apellido: req.body.apellido,
-        mail: req.body.mail,
-        contraseña: req.body.contraseña,
+        email: req.body.email,
+        paswword: req.body.paswword,
         telefono: req.body.telefono,
         dni: req.body.dni,
         consultorio: req.body.consultorio,
@@ -25,13 +25,13 @@ function sanitizeSecretariaInput(req, res, next) {
     next();
 }
 async function login(req, res) {
-    const { mail, contraseña } = req.body;
+    const { email, password } = req.body;
     try {
-        const secretaria = await em.findOne(Secretaria, { mail });
+        const secretaria = await em.findOne(Secretaria, { email });
         if (!secretaria) {
             return res.status(401).json({ message: 'Usuario no encontrado' });
         }
-        const isPasswordValid = await comparePassword(contraseña, secretaria.contraseña);
+        const isPasswordValid = await comparePassword(password, secretaria.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Contraseña incorrecta' });
         }
@@ -86,18 +86,16 @@ async function add(req, res) {
         if (existingSecretaria) {
             return res.status(400).json({ message: 'El Secretaria ya existe' });
         }
-        const hashedPassword = await hashPassword(req.body.sanitizedInput.contraseña);
-        // Asigno a la constante data el hash de la contraseña
+        const hashedPassword = await hashPassword(req.body.sanitizedInput.paswword);
+        // Asigno a la constante data el hash de la paswword
         const secretarialogoData = {
             ...req.body.sanitizedInput,
-            contraseña: hashedPassword,
+            paswword: hashedPassword
         };
-        // Creo secretaria pasandole como parametro la constante secretarialogoData
+        // Creo secretaria pasandole como parametro la constante secretarialogoData 
         const secretaria = em.create(Secretaria, secretarialogoData);
         await em.flush();
-        res
-            .status(201)
-            .json({ message: 'Secretaria creada exitosamente', data: secretaria });
+        res.status(201).json({ message: 'Secretaria creada exitosamente', data: secretaria });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

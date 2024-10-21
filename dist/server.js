@@ -11,9 +11,14 @@ import { pacienteRouter } from './paciente/paciente.routes.js';
 import { precioRouter } from './precio/precio.routes.js';
 import { dispoRouter } from './disponibilidad/dispo.routes.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 const app = express();
 app.use(express.json());
-//luego de los middlewares base
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true, // Permitir el envío de cookies
+}));
+app.use(cookieParser()); // Proceso de cookies
 app.use((req, res, next) => {
     RequestContext.create(orm.em, next); // em (Entity Manager)
 });
@@ -26,7 +31,6 @@ app.use('/api/turnos', turnoRouter);
 app.use('/api/pacientes', pacienteRouter);
 app.use('/api/precios', precioRouter);
 app.use('/api/disponibilidad', dispoRouter);
-app.use(cookieParser());
 app.use((_, res) => {
     return res.status(404).send({ message: 'Resource not found' });
 });

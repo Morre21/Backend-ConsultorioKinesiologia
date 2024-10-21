@@ -35,7 +35,7 @@ __decorate([
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Kinesiologo.prototype, "mail", void 0);
+], Kinesiologo.prototype, "email", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)

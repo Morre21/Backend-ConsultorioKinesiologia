@@ -19,7 +19,6 @@ function sanitizeKinesiologoInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-<<<<<<< HEAD
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         dni: req.body.dni,
@@ -31,18 +30,6 @@ function sanitizeKinesiologoInput(
         consultorio: req.body.consultorio,
   }
   
-=======
-    nombre: req.body.nombre,
-    apellido: req.body.apellido,
-    dni: req.body.dni,
-    matricula: req.body.matricula,
-    email: req.body.email,
-    telefono: req.body.telefono,
-    password: req.body.password,
-    especialidad: req.body.especialidad,
-    consultorio: req.body.consultorio,
-  };
->>>>>>> 2be8d45324d0969f37518b5b4eca5a0937728421
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {

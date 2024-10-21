@@ -23,11 +23,11 @@ __decorate([
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Secretaria.prototype, "mail", void 0);
+], Secretaria.prototype, "email", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Secretaria.prototype, "contrase\u00F1a", void 0);
+], Secretaria.prototype, "password", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", Number)

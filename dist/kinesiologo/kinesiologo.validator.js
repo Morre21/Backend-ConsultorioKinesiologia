@@ -21,7 +21,7 @@ export const validateKinesiologo = [
     } return true; }) //https://express-validator.github.io/docs/guides/customizing
         .isLength({ min: 11, max: 12 })
         .notEmpty().withMessage('La matrícula es obligatoria.'),
-    body('mail')
+    body('email')
         .isEmail().withMessage('Debe proporcionar un correo válido.'),
     body('telefono')
         .isNumeric().withMessage('El teléfono debe ser un número.'),
