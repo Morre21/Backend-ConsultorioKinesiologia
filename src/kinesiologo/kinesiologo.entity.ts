@@ -15,7 +15,7 @@ export class Kinesiologo extends BaseEntity{
   @Property({ nullable:false })
   apellido !: string
   @Property({ nullable:false })
-  mail !: string
+  email !: string
   @Property({ nullable:false })
   password !: string
   @Property({ nullable:false })

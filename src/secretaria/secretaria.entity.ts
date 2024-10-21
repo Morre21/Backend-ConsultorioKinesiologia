@@ -9,9 +9,9 @@ export class Secretaria extends BaseEntity{
   @Property({ nullable:false })
   apellido !: string
   @Property({ nullable:false })
-  mail !: string
+  email !: string
   @Property({ nullable:false })
-  contraseña !: string
+  password !: string
   @Property({ nullable:false })
   telefono !: number
   @Property({ nullable:false })

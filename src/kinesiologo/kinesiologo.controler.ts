@@ -13,7 +13,7 @@ function sanitizeKinesiologoInput(req: Request, res: Response, next: NextFunctio
         apellido: req.body.apellido,
         dni: req.body.dni,
         matricula: req.body.matricula,
-        mail: req.body.mail,
+        email: req.body.email,
         telefono: req.body.telefono,
         password: req.body.password,
         especialidad: req.body.especialidad,

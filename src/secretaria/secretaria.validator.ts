@@ -14,14 +14,14 @@ export const validateSecretaria = [
     .isLength({min: 7, max: 8}).withMessage('El DNI debe tener entre 7 y 8 numeros.')
     .notEmpty().withMessage('El DNI es obligatorio.'),
 
-  body('mail')
+  body('email')
     .isEmail().withMessage('Debe proporcionar un correo válido.')
-    .notEmpty().withMessage('El mail es obligatorio.'),
+    .notEmpty().withMessage('El email es obligatorio.'),
 
   body('telefono')
     .isNumeric().withMessage('El teléfono debe ser númerico.'),
 
-    body('contraseña')
+    body('password')
     .isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres')
     .matches(/[a-z]/).withMessage('La contraseña debe contener al menos una letra minúscula')
     .matches(/[A-Z]/).withMessage('La contraseña debe contener al menos una letra mayúscula')

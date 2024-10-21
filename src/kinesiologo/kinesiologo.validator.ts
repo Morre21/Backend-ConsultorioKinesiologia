@@ -24,7 +24,7 @@ export const validateKinesiologo = [
     .isLength({min: 11, max: 12})
     .notEmpty().withMessage('La matrícula es obligatoria.'), //"541394092142"
 
-  body('mail')
+  body('email')
     .isEmail().withMessage('Debe proporcionar un correo válido.'),
 
   body('telefono')
