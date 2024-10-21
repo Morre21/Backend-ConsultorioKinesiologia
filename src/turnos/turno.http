@@ -14,7 +14,6 @@ Content-Type: application/json
     "importeTotal": 4500,
     "paciente": 2,
     "kinesiologo": 1,
-    "consultorio": 1,
     "tipoAtencion": 1
 }
 
