@@ -2,13 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import { Secretaria } from './secretaria.entity.js';
 import { orm } from '../shared/db/orm.js';
 import { comparePassword, hashPassword } from '../middlewares/authPass.js';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 const em = orm.em;
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 function sanitizeSecretariaInput(
   req: Request,

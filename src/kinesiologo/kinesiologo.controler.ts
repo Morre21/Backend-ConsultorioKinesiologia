@@ -11,7 +11,7 @@ const em = orm.em;
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 function sanitizeKinesiologoInput(
   req: Request,
