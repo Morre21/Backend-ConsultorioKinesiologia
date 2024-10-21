@@ -11,18 +11,13 @@ import { pacienteRouter } from './paciente/paciente.routes.js';
 import { precioRouter } from './precio/precio.routes.js';
 import { dispoRouter } from './disponibilidad/dispo.routes.js';
 import cookieParser from 'cookie-parser';
-
 const app = express();
 app.use(express.json());
-
 //luego de los middlewares base
-
 app.use((req, res, next) => {
-  RequestContext.create(orm.em, next); // em (Entity Manager)
+    RequestContext.create(orm.em, next); // em (Entity Manager)
 });
-
 //antes de las rutas y middlewares de negocio
-
 app.use('/api/consultorios', consultorioRouter);
 app.use('/api/secretarias', secretariaRouter);
 app.use('/api/kinesiologos', kinesiologoRouter);
@@ -32,13 +27,11 @@ app.use('/api/pacientes', pacienteRouter);
 app.use('/api/precios', precioRouter);
 app.use('/api/disponibilidad', dispoRouter);
 app.use(cookieParser());
-
 app.use((_, res) => {
-  return res.status(404).send({ message: 'Resource not found' });
+    return res.status(404).send({ message: 'Resource not found' });
 });
-
 await syncSchema(); //never in production
-
 app.listen(3000, () => {
-  console.log('Server runnning on http://localhost:3000/');
+    console.log('Server runnning on http://localhost:3000/');
 });
+//# sourceMappingURL=server.js.map

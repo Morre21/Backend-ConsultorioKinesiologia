@@ -9,7 +9,7 @@ const em = orm.em;
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 function sanitizePacienteInput(
   req: Request,
@@ -55,14 +55,21 @@ async function login(req: Request, res: Response) {
 
     const token = jwt.sign({ id: paciente.id }, JWT_SECRET, {
       expiresIn: '1h',
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 3600000,
     });
+
+    // Establece el token en una cookie segura
+    res.cookie('token', token, {
+      httpOnly: true, // El token solo puede ser accedido desde el servidor
+      secure: process.env.NODE_ENV === 'production', // Solo en HTTPS en producción
+      sameSite: 'strict', // Previene que el token sea enviado en requests cross-site
+      maxAge: 3600000, // 1 hora
+    });
+    
     res.status(200).json({
       message: 'Inicio de sesión exitoso',
       data: { dni: paciente.dni },
     });
+
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

@@ -7,6 +7,8 @@ import {
   update,
   remove,
   sanitizePacienteInput,
+  login,
+  logout
 } from './paciente.controller.js';
 import { validatePaciente } from './paciente.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';

@@ -6,6 +6,14 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;  // Ajusta `any` al tipo de tu usuario, si lo conoces
+    }
+  }
+}
+
 export function authToken(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies.token; // Obtén el token de las cookies
 

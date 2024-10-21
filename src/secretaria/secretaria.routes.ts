@@ -6,6 +6,8 @@ import {
   add,
   update,
   remove,
+  login,
+  logout
 } from './secretaria.controler.js';
 import { validateSecretaria } from './secretaria.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';

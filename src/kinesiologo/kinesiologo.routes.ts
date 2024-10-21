@@ -6,6 +6,8 @@ import {
   add,
   update,
   remove,
+  login,
+  logout
 } from './kinesiologo.controler.js';
 import { validateKinesiologo } from './kinesiologo.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
