@@ -15,8 +15,9 @@ import cors from 'cors';
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true, // Permitir el envío de cookies
+    origin: '*',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'] // Métodos que se permiten
 }));
 app.use(cookieParser()); // Proceso de cookies
 app.use((req, res, next) => {
