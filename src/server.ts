@@ -17,8 +17,8 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'http://localhost:5173',  
-  credentials: true,  // Permitir el envío de cookies
+  origin: ["http://localhost:5173"], // Usá un array de orígenes permitidos
+  credentials: true,
 }));
 
 app.use(cookieParser()); // Proceso de cookies

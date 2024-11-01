@@ -24,7 +24,6 @@ pacienteRouter.get('/', findAll);
 pacienteRouter.get('/:id', findOne);
 pacienteRouter.post(
   '/',
-  authToken,
   validatePaciente,
   validarErrores,
   sanitizePacienteInput,

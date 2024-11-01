@@ -26,9 +26,9 @@ function sanitizePacienteInput(req, res, next) {
     next();
 }
 async function login(req, res) {
-    const { dni, password } = req.body;
+    const { email, password } = req.body;
     try {
-        const paciente = await em.findOne(Paciente, { dni });
+        const paciente = await em.findOne(Paciente, { email });
         if (!paciente) {
             return res.status(401).json({ message: 'Usuario no encontrado' });
         }
@@ -48,7 +48,7 @@ async function login(req, res) {
         });
         res.status(200).json({
             message: 'Inicio de sesión exitoso',
-            data: { dni: paciente.dni },
+            data: { email: paciente.email },
         });
     }
     catch (error) {
