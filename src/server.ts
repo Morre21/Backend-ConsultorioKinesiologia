@@ -17,8 +17,13 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
+<<<<<<< HEAD
   origin: ["http://localhost:5173"], // Usá un array de orígenes permitidos
   credentials: true,
+=======
+  origin: 'http://localhost:5173', 
+  credentials: true,  // Permitir el envío de cookies
+>>>>>>> 5b378c45afe9b5c41d113c74d9a0bcd5b4fe2132
 }));
 
 app.use(cookieParser()); // Proceso de cookies
