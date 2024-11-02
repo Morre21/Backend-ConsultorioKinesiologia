@@ -18,7 +18,7 @@ export const validateDispo= [
     .notEmpty()
     .withMessage('El día es obligatorio.')
     .custom((value) => {
-      const diasValidos = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+      const diasValidos = ['lunes', 'martes', 'miércoles',"miercoles", 'jueves', 'viernes', 'sábado', 'sabado', 'domingo'];
       const diaLowerCase = value.toLowerCase().trim();
       if (!diasValidos.includes(diaLowerCase)) {
         throw new Error('El día de la semana no es válido.');

@@ -21,9 +21,16 @@ export const validateTurno = [
     const fechaString = req.body.fecha;
     const hora = value;
 
-    // Convierte la fecha de string a Date
-    const fecha = new Date(fechaString);
-    const diaSemana = fecha.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
+    // Asegúrate de que la fecha esté en formato ISO (YYYY-MM-DD)
+    const fechaStringISO = fechaString.includes("T") ? fechaString : `${fechaString}T00:00:00Z`; //se agrega T00:00:00Z para que se interprete en UTC
+    const fecha = new Date(fechaStringISO);
+    // Forzar la obtención del día de la semana en español en UTC
+    const diaSemana = fecha.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      timeZone: 'UTC' // Uso UTC para evitar problemas de zona horaria
+    }).toLowerCase();
+
+    console.log(diaSemana);
 
     // Verifica si ya existe un turno con el mismo kinesiólogo, fecha y hora
     const turnoExistente = await em.findOne(Turno, {
