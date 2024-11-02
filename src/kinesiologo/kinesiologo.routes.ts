@@ -21,7 +21,6 @@ kinesiologoRouter.get('/', authToken, findAll);
 kinesiologoRouter.get('/:id', findOne);
 kinesiologoRouter.post(
   '/',
-  authToken,
   validateKinesiologo,
   validarErrores,
   sanitizeKinesiologoInput,
