@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "fechaDesde": "2024-11-12",
-    "diaSemana": "MARTES",
+    "diaSemana": "jueves",
     "horaInicio": "12:00",
     "horaFin": "18:00",
     "kinesiologo":"541394092142"
