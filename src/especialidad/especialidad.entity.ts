@@ -1,4 +1,4 @@
-import { Entity, Property, ManyToOne, Collection, Cascade, Rel, OneToMany } from "@mikro-orm/core";
+import { Entity, Property, Collection, Cascade, OneToMany } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Kinesiologo } from "../kinesiologo/kinesiologo.entity.js";
 import { Precio } from "../precio/precio.entity.js";
