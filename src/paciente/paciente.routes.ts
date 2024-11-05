@@ -1,4 +1,5 @@
 //Acá hacemos una especie de índice por cada módulo
+import { Request, Response, NextFunction } from 'express';
 import { Router } from 'express';
 import {
   findAll,
@@ -16,6 +17,11 @@ import { manejoErrores } from '../middlewares/manejoErrores.js';
 import { authToken } from '../middlewares/authToken.js';
 
 const pacienteRouter = Router();
+
+pacienteRouter.post('/login', login)
+pacienteRouter.get('/turnos', authToken)
+
+pacienteRouter.post('/logout', logout);
 
 /*Le definimos el directorio raiz, porque si queremos hacer una modificación.
 De esta manera no queda atada y podemos utilizar la ruta que necesitemos en app.ts 
@@ -46,10 +52,8 @@ pacienteRouter.patch(
   update
 );
 pacienteRouter.delete('/:id', authToken, remove);
-pacienteRouter.post('/login', login);
-pacienteRouter.post('/logout', logout);
 
-import { Request, Response, NextFunction } from 'express';
+
 
 pacienteRouter.use(
   (err: any, req: Request, res: Response, next: NextFunction) => {
