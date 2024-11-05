@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { sanitizeSecretariaInput, findAll, findOne, add, update, remove, login, logout } from './secretaria.controler.js';
+import { sanitizeSecretariaInput, findAll, findOne, add, update, remove, login, logout, } from './secretaria.controler.js';
 import { validateSecretaria } from './secretaria.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';

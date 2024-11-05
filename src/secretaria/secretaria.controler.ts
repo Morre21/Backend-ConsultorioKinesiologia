@@ -114,19 +114,31 @@ async function add(req: Request, res: Response) {
     });
 
     if (existingSecretaria) {
-      return res.status(400).json({ message: 'El Secretaria ya existe' });
+      return res.status(400).json({ message: 'La Secretaria ya existe' });
     }
 
     const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
     // Asigno a la constante data el hash de la paswword
-    const secretarialogoData =  {
+    const secretarialogoData = {
       ...req.body.sanitizedInput,
+<<<<<<< HEAD
         password: hashedPassword};
   
     // Creo secretaria pasandole como parametro la constante secretarialogoData 
     const secretaria = em.create(Secretaria, secretarialogoData)
     await em.flush()
     res.status(201).json({ message: 'Secretaria creada exitosamente', data: secretaria })
+=======
+      paswword: hashedPassword,
+    };
+
+    // Creo secretaria pasandole como parametro la constante secretarialogoData
+    const secretaria = em.create(Secretaria, secretarialogoData);
+    await em.flush();
+    res
+      .status(201)
+      .json({ message: 'Secretaria creada exitosamente', data: secretaria });
+>>>>>>> 73416ae04b60b357bc70a3fceb3fa965f7140802
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

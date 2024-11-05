@@ -84,7 +84,7 @@ async function add(req, res) {
             dni: req.body.sanitizedInput.dni,
         });
         if (existingSecretaria) {
-            return res.status(400).json({ message: 'El Secretaria ya existe' });
+            return res.status(400).json({ message: 'La Secretaria ya existe' });
         }
         const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
         // Asigno a la constante data el hash de la paswword
