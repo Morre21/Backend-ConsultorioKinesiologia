@@ -8,7 +8,7 @@ const kinesiologoRouter = Router();
 // Acá definimos las rutas para cada método del controlador
 kinesiologoRouter.get('/', authToken, findAll);
 kinesiologoRouter.get('/:id', findOne);
-kinesiologoRouter.post('/', authToken, validateKinesiologo, validarErrores, sanitizeKinesiologoInput, add);
+kinesiologoRouter.post('/', validateKinesiologo, validarErrores, sanitizeKinesiologoInput, add);
 kinesiologoRouter.put('/:id', authToken, validateKinesiologo, validarErrores, sanitizeKinesiologoInput, update);
 kinesiologoRouter.patch('/:id', validateKinesiologo, validarErrores, sanitizeKinesiologoInput, update);
 kinesiologoRouter.delete('/:id', authToken, remove);

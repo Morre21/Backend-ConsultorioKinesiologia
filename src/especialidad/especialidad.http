@@ -27,7 +27,7 @@ Content-Type: application/json
 
 {
     "nombre": "Osteopatía",
-    "estado": false
+    "estado": true
 }
 
 ###ID

@@ -9,10 +9,10 @@ Content-Type: application/json
 // Franja horaria del kine no los horarios puntuales donde esta dispo
 
 {
-    "fechaDesde": "2024-11-12",
-    "diaSemana": "jueves",
+    "fechaDesde": "2024-11-05",
+    "diaSemana": "Lunes",
     "horaInicio": "12:00",
-    "horaFin": "18:00",
+    "horaFin": "20:00",
     "kinesiologo":"541394092142"
 }
 
@@ -23,10 +23,10 @@ Content-Type: application/json
 
 {
     "fechaDesde": "2024-11-10",
-    "diaSemana": "DOMINGO",
+    "diaSemana": "Martes",
     "horaInicio": "06:00",
     "horaFin": "12:00",
-    "kinesiologo": "541394092142"
+    "kinesiologo": 1
 }
 
 

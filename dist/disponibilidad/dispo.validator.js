@@ -13,23 +13,11 @@ export const validateDispo = [
         .withMessage('El día debe ser una cadena de texto.')
         .notEmpty()
         .withMessage('El día es obligatorio.')
-        .custom((value, { req }) => {
-        const diasValidos = ['lunes', 'martes', 'miércoles', "miercoles", 'jueves', 'viernes', 'sábado', 'sabado', 'domingo'];
+        .custom((value) => {
+        const diasValidos = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
         const diaLowerCase = value.toLowerCase().trim();
         if (!diasValidos.includes(diaLowerCase)) {
             throw new Error('El día de la semana no es válido.');
-        }
-        // Obtener el día de la semana correspondiente a la fecha ingresada
-        const fecha = new Date(req.body.fechaDesde);
-        const diaSemanaCorrespondiente = fecha.toLocaleDateString('es-ES', {
-            weekday: 'long',
-            timeZone: 'UTC' // Uso UTC para evitar problemas de zona horaria
-        }).toLowerCase();
-        // Normalizar el día correspondiente a formato título
-        const diaSemanaCorrespondienteCapitalizado = diaSemanaCorrespondiente.charAt(0).toUpperCase() + diaSemanaCorrespondiente.slice(1);
-        // Comparar con el día ingresado
-        if (diaLowerCase !== diaSemanaCorrespondiente) {
-            throw new Error(`La fecha ${req.body.fechaDesde} corresponde a un ${diaSemanaCorrespondienteCapitalizado}, no a un ${value.charAt(0).toUpperCase() + value.slice(1)}.`);
         }
         // Normaliza el día a formato título (primera letra mayúscula)
         return diaLowerCase.charAt(0).toUpperCase() + diaLowerCase.slice(1);

@@ -1,6 +1,7 @@
 import { Request, Response} from 'express'
 import { orm } from '../shared/db/orm.js'
 import { Especialidad } from './especialidad.entity.js'
+import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
 
 const em = orm.em
 
@@ -56,4 +57,20 @@ async function remove(req: Request, res: Response) {
   } 
 }
 
-export { findAll, findOne, add, update, remove }
+
+async function findKinesiologosByEspecialidad(req: Request, res: Response) {
+  try {
+    const id = Number.parseInt(req.params.id);
+    const especialidad = await em.findOne(Especialidad, { id }, { populate: ['Kinesiologos'] }); // Asegúrate de que 'kinesiologos' es el nombre correcto de la relación en tu entidad
+
+    if (!especialidad) {
+      return res.status(404).json({ message: 'Especialidad no encontrada' });
+    }
+
+    res.status(200).json({ message: 'Kinesiólogos encontrados', data: especialidad.Kinesiologos });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener kinesiólogos', error });
+  }
+}
+
+export { findAll, findOne, add, update, remove, findKinesiologosByEspecialidad };

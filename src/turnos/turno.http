@@ -8,8 +8,8 @@ POST http://localhost:3000/api/turnos
 Content-Type: application/json
 
 {
-    "fecha": "2024-11-12",
-    "hora": "13:00",
+    "fecha": "2024-11-05",
+    "hora": "16:00",
     "estado": "Activo",
     "importeTotal": 4500,
     "paciente": 2,
@@ -22,8 +22,8 @@ POST http://localhost:3000/api/turnos
 Content-Type: application/json
 
 {
-    "fecha": "2024-11-10",
-    "hora": "12:00",
+    "fecha": "2024-11-02",
+    "hora": "18:00",
     "estado": "Activo",
     "importeTotal": 5500,
     "paciente": 2,
