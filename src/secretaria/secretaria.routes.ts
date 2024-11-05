@@ -7,7 +7,7 @@ import {
   update,
   remove,
   login,
-  logout
+  logout,
 } from './secretaria.controler.js';
 import { validateSecretaria } from './secretaria.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
@@ -21,7 +21,6 @@ secretariaRouter.get('/', findAll);
 secretariaRouter.get('/:id', findOne);
 secretariaRouter.post(
   '/',
-  authToken,
   validateSecretaria,
   validarErrores,
   sanitizeSecretariaInput,

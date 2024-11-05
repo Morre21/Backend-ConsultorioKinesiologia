@@ -17,11 +17,10 @@
 
 # Commands
 
-
 docker run --name mongodb-dsw -v C:\Users\PC\docker-volumes\percona-mongodb-dsw:\data\db -p 27017:27017 -d percona/percona-server-mongodb:latest
 
 docker run --name mongodb-dsw -v C:\Users\PC\docker-volumes\consultorio:\data\db -p 27017:27017 -d percona/percona-server-mongodb:latest
 
----------
+---
 
-docker run --name mysql-dsw -v "C:\Users\PC\docker-volumes\consultoriomysql:\var\lib\mysql" -e MYSQL_ROOT_HOST="%" -e MYSQL_ALLOW_EMPTY_PASSWORD="yes" -e MYSQL_DATABASE="consultorio" -e MYSQL_USER="nibble" -e MYSQL_PASSWORD="nibble" -p 3306:3306 percona/percona-server
+docker run --name mysql-dsw -v "C:\Users\Educa Informatica\docker-volumes\consultoriomysql:\var\lib\mysql" -e MYSQL_ROOT_HOST="%" -e MYSQL_ALLOW_EMPTY_PASSWORD="yes" -e MYSQL_DATABASE="consultorio" -e MYSQL_USER="nibble" -e MYSQL_PASSWORD="nibble" -p 3306:3306 percona/percona-server
