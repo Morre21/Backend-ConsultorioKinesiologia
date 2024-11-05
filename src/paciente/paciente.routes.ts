@@ -9,7 +9,8 @@ import {
   remove,
   sanitizePacienteInput,
   login,
-  logout
+  logout,
+  obtenerTurnos
 } from './paciente.controller.js';
 import { validatePaciente } from './paciente.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
@@ -19,7 +20,7 @@ import { authToken } from '../middlewares/authToken.js';
 const pacienteRouter = Router();
 
 pacienteRouter.post('/login', login)
-pacienteRouter.get('/turnos', authToken)
+pacienteRouter.get('/turnos', authToken, obtenerTurnos)
 
 pacienteRouter.post('/logout', logout);
 

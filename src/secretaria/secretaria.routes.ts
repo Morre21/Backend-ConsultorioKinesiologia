@@ -21,7 +21,6 @@ secretariaRouter.get('/', findAll);
 secretariaRouter.get('/:id', findOne);
 secretariaRouter.post(
   '/',
-  authToken,
   validateSecretaria,
   validarErrores,
   sanitizeSecretariaInput,

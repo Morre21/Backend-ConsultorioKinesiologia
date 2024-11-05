@@ -20,7 +20,7 @@ function sanitizeSecretariaInput(
     nombre: req.body.nombre,
     apellido: req.body.apellido,
     email: req.body.email,
-    paswword: req.body.paswword,
+    password: req.body.password,
     telefono: req.body.telefono,
     dni: req.body.dni,
     consultorio: req.body.consultorio,
@@ -117,11 +117,11 @@ async function add(req: Request, res: Response) {
       return res.status(400).json({ message: 'El Secretaria ya existe' });
     }
 
-    const hashedPassword = await hashPassword(req.body.sanitizedInput.paswword);
+    const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
     // Asigno a la constante data el hash de la paswword
     const secretarialogoData =  {
       ...req.body.sanitizedInput,
-        paswword: hashedPassword};
+        password: hashedPassword};
   
     // Creo secretaria pasandole como parametro la constante secretarialogoData 
     const secretaria = em.create(Secretaria, secretarialogoData)

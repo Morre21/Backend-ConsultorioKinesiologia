@@ -12,7 +12,7 @@ Content-Type: application/json
     "hora": "16:00",
     "estado": "Activo",
     "importeTotal": 4500,
-    "paciente": 2,
+    "paciente": 1,
     "kinesiologo": 1,
     "consultorio": 1
 }

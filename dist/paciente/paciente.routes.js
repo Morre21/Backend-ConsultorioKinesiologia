@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { findAll, findOne, add, update, remove, sanitizePacienteInput, login, logout } from './paciente.controller.js';
+import { findAll, findOne, add, update, remove, sanitizePacienteInput, login, logout, obtenerTurnos } from './paciente.controller.js';
 import { validatePaciente } from './paciente.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';
 import { authToken } from '../middlewares/authToken.js';
 const pacienteRouter = Router();
 pacienteRouter.post('/login', login);
-pacienteRouter.get('/turnos', authToken);
+pacienteRouter.get('/turnos', authToken, obtenerTurnos);
 pacienteRouter.post('/logout', logout);
 /*Le definimos el directorio raiz, porque si queremos hacer una modificación.
 De esta manera no queda atada y podemos utilizar la ruta que necesitemos en app.ts

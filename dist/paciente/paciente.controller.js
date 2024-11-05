@@ -3,6 +3,7 @@ import { orm } from '../shared/db/orm.js';
 import { hashPassword, comparePassword } from '../middlewares/authPass.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { Turno } from '../turnos/turno.entity.js';
 const em = orm.em;
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -36,7 +37,7 @@ async function login(req, res) {
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Contraseña incorrecta' });
         }
-        const token = jwt.sign({ id: paciente.id }, JWT_SECRET, {
+        const token = jwt.sign({ id: paciente.id, nombre: paciente.nombre, apellido: paciente.apellido }, JWT_SECRET, {
             expiresIn: '1h',
         });
         // Establece el token en una cookie segura
@@ -53,6 +54,40 @@ async function login(req, res) {
     }
     catch (error) {
         res.status(500).json({ message: error.message });
+    }
+}
+async function obtenerTurnos(req, res) {
+    const userId = req.user?.id;
+    const nombre = req.user?.nombre;
+    const apellido = req.user?.apellido;
+    if (!userId) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+    try {
+        // Encuentra los turnos del paciente autenticado
+        const turnos = await em.find(Turno, { paciente: userId });
+        // Formatea la respuesta para cumplir con el formato JSON deseado
+        const turnosFormateados = turnos.map(turno => ({
+            id: turno.id,
+            fecha: turno.fecha.toISOString(),
+            hora: turno.hora,
+            estado: turno.estado,
+            importeTotal: turno.importeTotal,
+            paciente: turno.paciente.id,
+            kinesiologo: turno.kinesiologo.id, // ID del kinesiólogo
+        }));
+        res.status(200).json({
+            userId,
+            nombre,
+            apellido,
+            turnos: turnosFormateados, // Incluye los turnos formateados en la respuesta
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: 'Error al obtener los turnos',
+            error: error.message,
+        });
     }
 }
 async function logout(req, res) {
@@ -129,5 +164,5 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizePacienteInput, findAll, findOne, add, update, remove, login, logout, };
+export { sanitizePacienteInput, findAll, findOne, add, update, remove, login, logout, obtenerTurnos };
 //# sourceMappingURL=paciente.controller.js.map
