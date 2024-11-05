@@ -121,24 +121,12 @@ async function add(req: Request, res: Response) {
     // Asigno a la constante data el hash de la paswword
     const secretarialogoData = {
       ...req.body.sanitizedInput,
-<<<<<<< HEAD
         password: hashedPassword};
   
     // Creo secretaria pasandole como parametro la constante secretarialogoData 
     const secretaria = em.create(Secretaria, secretarialogoData)
     await em.flush()
     res.status(201).json({ message: 'Secretaria creada exitosamente', data: secretaria })
-=======
-      paswword: hashedPassword,
-    };
-
-    // Creo secretaria pasandole como parametro la constante secretarialogoData
-    const secretaria = em.create(Secretaria, secretarialogoData);
-    await em.flush();
-    res
-      .status(201)
-      .json({ message: 'Secretaria creada exitosamente', data: secretaria });
->>>>>>> 73416ae04b60b357bc70a3fceb3fa965f7140802
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
