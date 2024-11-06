@@ -65,7 +65,7 @@ async function obtenerTurnos(req, res) {
     }
     try {
         // Encuentra los turnos del paciente autenticado
-        const turnos = await em.find(Turno, { paciente: userId });
+        const turnos = await em.find(Turno, { paciente: userId }, { populate: ['kinesiologo'] });
         // Formatea la respuesta para cumplir con el formato JSON deseado
         const turnosFormateados = turnos.map(turno => ({
             id: turno.id,
@@ -74,7 +74,11 @@ async function obtenerTurnos(req, res) {
             estado: turno.estado,
             importeTotal: turno.importeTotal,
             paciente: turno.paciente.id,
-            kinesiologo: turno.kinesiologo.id, // ID del kinesiólogo
+            kinesiologo: {
+                id: turno.kinesiologo.id,
+                nombre: turno.kinesiologo.nombre,
+                apellido: turno.kinesiologo.apellido
+            } // ID del kinesiólogo
         }));
         res.status(200).json({
             userId,
