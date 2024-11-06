@@ -58,7 +58,7 @@ async function login(req: Request, res: Response) {
       expiresIn: '1h',
     });
 
-    // Establece el token en una cookie segura
+    // Establece el token en una cookie 
     res.cookie('token', token, {
       httpOnly: true, // El token solo puede ser accedido desde el servidor
       secure: process.env.NODE_ENV === 'production', // Solo en HTTPS en producción

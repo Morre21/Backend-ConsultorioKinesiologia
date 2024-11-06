@@ -13,8 +13,12 @@ import { validateKinesiologo } from './kinesiologo.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
 import { authToken } from '../middlewares/authToken.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';
+import { obtenerTurnosKinesiologo } from './kinesiologo.controler.js';
 
 const kinesiologoRouter = Router();
+
+kinesiologoRouter.post('/login', login);
+kinesiologoRouter.get('/turnos', authToken, obtenerTurnosKinesiologo);
 
 // Acá definimos las rutas para cada método del controlador
 kinesiologoRouter.get('/', authToken, findAll);
@@ -42,10 +46,10 @@ kinesiologoRouter.patch(
   update
 );
 kinesiologoRouter.delete('/:id', authToken, remove);
-kinesiologoRouter.post('/login', login);
 kinesiologoRouter.post('/logout', logout);
 
 import { Request, Response, NextFunction } from 'express';
+import { obtenerTurnos } from '../paciente/paciente.controller.js';
 
 kinesiologoRouter.use(
   (err: any, req: Request, res: Response, next: NextFunction) => {

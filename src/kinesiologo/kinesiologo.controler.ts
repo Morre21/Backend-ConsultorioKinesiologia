@@ -4,6 +4,7 @@ import { orm } from '../shared/db/orm.js';
 import { comparePassword, hashPassword } from '../middlewares/authPass.js';
 import { Especialidad } from '../especialidad/especialidad.entity.js';
 import { Consultorio } from '../consultorio/consultorio.entity.js';
+import { Turno } from '../turnos/turno.entity.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
@@ -58,22 +59,68 @@ async function login(req: Request, res: Response) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign({ id: kinesiologo.id }, JWT_SECRET, {
+    const token = jwt.sign({ id: kinesiologo.id, nombre: kinesiologo.nombre, apellido: kinesiologo.apellido }, JWT_SECRET, {
       expiresIn: '1h',
     });
 
+    // Establece el token en una cookie segura
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 3600000,
+      httpOnly: true, // El token solo puede ser accedido desde el servidor
+      secure: process.env.NODE_ENV === 'production', // Solo en HTTPS en producción
+      sameSite: 'strict', // Previene que el token sea enviado en requests cross-site
+      maxAge: 3600000, // 1 hora
     });
+
     res.status(200).json({
       message: 'Inicio de sesión exitoso',
       data: { matricula: kinesiologo.matricula },
     });
+
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+  }
+}
+
+
+async function obtenerTurnosKinesiologo(req: Request, res: Response) {
+  const userId = req.user?.id;
+  const nombre = req.user?.nombre;
+  const apellido = req.user?.apellido;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Kinesiologo no autenticado' });
+  }
+
+  try {
+    // Encuentra los turnos del kinesiologo autenticado
+    const turnos = await em.find(Turno, { kinesiologo: userId },{ populate: ['kinesiologo']});
+
+    // Formatea la respuesta para cumplir con el formato JSON deseado
+    const turnosFormateados = turnos.map(turno => ({
+      id: turno.id,
+      fecha: turno.fecha.toISOString(), // Asegura que la fecha esté en formato ISO
+      hora: turno.hora, // Suponiendo que `hora` ya es una string en el formato deseado
+      estado: turno.estado,
+      importeTotal: turno.importeTotal,
+      paciente: turno.paciente.id, // ID del paciente
+      kinesiologo: {
+        id: turno.kinesiologo.id,
+        nombre: turno.kinesiologo.nombre,
+        apellido: turno.kinesiologo.apellido
+      } // ID del kinesiólogo
+    }));
+
+    res.status(200).json({
+      userId,
+      nombre,
+      apellido,
+      turnos: turnosFormateados, // Incluye los turnos formateados en la respuesta
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      message: 'Error al obtener los turnos',
+      error: error.message,
+    });
   }
 }
 
@@ -195,4 +242,5 @@ export {
   remove,
   login,
   logout,
+  obtenerTurnosKinesiologo,
 };

@@ -40,7 +40,7 @@ async function login(req, res) {
         const token = jwt.sign({ id: paciente.id, nombre: paciente.nombre, apellido: paciente.apellido }, JWT_SECRET, {
             expiresIn: '1h',
         });
-        // Establece el token en una cookie segura
+        // Establece el token en una cookie 
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
