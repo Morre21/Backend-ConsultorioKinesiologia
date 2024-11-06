@@ -35,14 +35,24 @@ async function login(req, res) {
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Contraseña incorrecta' });
         }
-        const token = jwt.sign({ id: secretaria.id }, JWT_SECRET, {
+        const token = jwt.sign({
+            id: secretaria.id,
+            nombre: secretaria.nombre,
+            apellido: secretaria.apellido,
+        }, JWT_SECRET, {
             expiresIn: '1h',
         });
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
             maxAge: 3600000,
+        });
+        res
+            .status(200)
+            .json({
+            message: 'Sesión iniciada exitosamente',
+            data: { email: secretaria.email },
         });
     }
     catch (error) {
@@ -90,12 +100,14 @@ async function add(req, res) {
         // Asigno a la constante data el hash de la paswword
         const secretarialogoData = {
             ...req.body.sanitizedInput,
-            password: hashedPassword
+            password: hashedPassword,
         };
-        // Creo secretaria pasandole como parametro la constante secretarialogoData 
+        // Creo secretaria pasandole como parametro la constante secretarialogoData
         const secretaria = em.create(Secretaria, secretarialogoData);
         await em.flush();
-        res.status(201).json({ message: 'Secretaria creada exitosamente', data: secretaria });
+        res
+            .status(201)
+            .json({ message: 'Secretaria creada exitosamente', data: secretaria });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
