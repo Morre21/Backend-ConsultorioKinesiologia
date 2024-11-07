@@ -1,10 +1,13 @@
 
 import { Router } from "express";
-import { sanitizeTurnoInput, findAll, findOne, add, update, remove} from "./turno.controller.js";
+import { sanitizeTurnoInput, findAll, findOne, add, update, remove, creacionTurno} from "./turno.controller.js";
 import { validateTurno } from "./turno.validator.js";
 import { validarErrores } from "../middlewares/validacionErrores.js";
+import { authToken } from "../middlewares/authToken.js";
 
 export const turnoRouter = Router()
+
+turnoRouter.post('/turnoNuevo',authToken,creacionTurno)
 
 turnoRouter.get('/', findAll)
 turnoRouter.get('/:id', findOne)

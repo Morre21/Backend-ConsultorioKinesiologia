@@ -7,7 +7,7 @@ POST http://localhost:3000/api/precios
 Content-Type: application/json
 
 {
-    "fechaDesde": "2024-06-19",
+    "fechaDesde": "2024-10-07",
     "importe": "5000",
     "especialidad": 1
 }
