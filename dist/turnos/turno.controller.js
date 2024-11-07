@@ -85,18 +85,30 @@ async function creacionTurno(req, res) {
         switch (req.body.action) {
             case 'consultorios':
                 const consultorios = await orm.em.find(Consultorio, {}, { populate: ['Kinesiologos'] });
+                if (!consultorios)
+                    return res.status(404).json({ error: 'No se encontraron consultorios' });
                 return res.json(consultorios);
             case 'especialidades':
                 // Obtener todas las especialidades sin filtrar por consultorio
                 const especialidades = await orm.em.find(Especialidad, {});
+                if (!especialidades)
+                    return res.status(404).json({ error: 'No se encontraron especialidades' });
                 return res.json(especialidades);
             case 'kinesiologos':
+                if (!req.body.especialidadId || !req.body.consultorioId) {
+                    return res.status(400).json({ error: 'Debe proporcionar especialidadId y consultorioId' });
+                }
                 const kinesiologos = await orm.em.find(Kinesiologo, {
                     especialidad: req.body.especialidadId,
                     consultorio: req.body.consultorioId,
                 });
+                if (!kinesiologos)
+                    return res.status(404).json({ error: 'No se encontraron kinesiólogos' });
                 return res.json(kinesiologos);
             case 'fechas':
+                if (!req.body.fecha || !req.body.kinesiologoId) {
+                    return res.status(400).json({ error: 'Debe proporcionar fecha y kinesiologoId' });
+                }
                 const fecha = new Date(req.body.fecha);
                 const diaSemana = fecha.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
                 // Obtener las disponibilidades del kinesiólogo para el día seleccionado
@@ -115,26 +127,28 @@ async function creacionTurno(req, res) {
                     kinesiologo: req.body.kinesiologoId,
                     fecha: fecha,
                 });
-                // Crear un Set con los horarios ocupados para búsqueda eficiente
-                const horariosOcupados = new Set(turnosRegistrados.map(turno => turno.hora));
-                // Generar horarios disponibles evitando los ocupados
-                let horariosDisponibles = new Set();
-                for (const disponibilidad of disponibilidades) {
+                // Crear un array con los horarios ocupados para búsqueda eficiente
+                const horariosOcupados = turnosRegistrados.map(turno => turno.hora);
+                // Generar los horarios disponibles
+                const horariosDisponibles = disponibilidades.flatMap(disponibilidad => {
                     const horaInicio = parseInt(disponibilidad.horaInicio.split(':')[0]);
                     const horaFin = parseInt(disponibilidad.horaFin.split(':')[0]);
-                    // Generar slots de 1 hora dentro del intervalo
+                    // Crear un array de horarios posibles para cada disponibilidad
+                    const horarios = [];
                     for (let hora = horaInicio; hora < horaFin; hora++) {
                         const horario = `${hora.toString().padStart(2, '0')}:00`;
-                        // Solo agregar si no está ocupado
-                        if (!horariosOcupados.has(horario)) {
-                            horariosDisponibles.add(horario);
-                        }
+                        horarios.push(horario);
                     }
+                    return horarios;
+                }).filter(horario => !horariosOcupados.includes(horario));
+                if (horariosDisponibles.length === 0) {
+                    return res.json({
+                        message: 'No hay horarios disponibles para la fecha seleccionada',
+                        horariosDisponibles: []
+                    });
                 }
-                // Convertir a array y ordenar
-                const horariosFinales = Array.from(horariosDisponibles).sort();
                 return res.json({
-                    horariosDisponibles: horariosFinales,
+                    horariosDisponibles: horariosDisponibles.sort(),
                     intervalos: disponibilidades.map(d => ({
                         diaSemana: d.diaSemana,
                         horaInicio: d.horaInicio,
@@ -171,6 +185,7 @@ async function creacionTurno(req, res) {
         }
     }
     catch (error) {
+        console.error('Error en creacionTurno:', error);
         res.status(500).json({ error: 'Error al procesar la solicitud' });
     }
 }
