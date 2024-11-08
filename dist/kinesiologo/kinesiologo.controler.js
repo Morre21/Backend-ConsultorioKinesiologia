@@ -192,5 +192,27 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizeKinesiologoInput, findAll, findOne, add, update, remove, login, logout, obtenerTurnosKinesiologo, };
+async function findKineByEspCon(req, res) {
+    const userId = req.user?.id;
+    const consultorio = req.user?.consultorio;
+    const especialidad = Number(req.params.especialidadId);
+    if (!userId) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+    try {
+        // Encuentra los turnos del paciente autenticado
+        const kinesiologos = await em.find(Kinesiologo, { consultorio, especialidad }, { populate: ['consultorio', 'especialidad'] });
+        if (!especialidad || !consultorio) {
+            return res.status(404).json({ message: 'Especialidad o consultorio no encontrado' });
+        }
+        res.status(200).json({ message: 'Kinesiólogos encontrados', data: kinesiologos });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: 'Error al obtener los kinesiologos',
+            error: error.message,
+        });
+    }
+}
+export { sanitizeKinesiologoInput, findAll, findOne, add, update, remove, login, logout, obtenerTurnosKinesiologo, findKineByEspCon };
 //# sourceMappingURL=kinesiologo.controler.js.map

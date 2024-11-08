@@ -39,6 +39,7 @@ async function login(req, res) {
             id: secretaria.id,
             nombre: secretaria.nombre,
             apellido: secretaria.apellido,
+            consultorio: secretaria.consultorio
         }, JWT_SECRET, {
             expiresIn: '1h',
         });

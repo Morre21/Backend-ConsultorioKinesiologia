@@ -59,6 +59,7 @@ async function login(req: Request, res: Response) {
         id: secretaria.id,
         nombre: secretaria.nombre,
         apellido: secretaria.apellido,
+        consultorio: secretaria.consultorio
       },
       JWT_SECRET,
       {
