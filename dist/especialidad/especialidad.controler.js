@@ -1,5 +1,6 @@
 import { orm } from '../shared/db/orm.js';
 import { Especialidad } from './especialidad.entity.js';
+import { Consultorio } from '../consultorio/consultorio.entity.js';
 const em = orm.em;
 async function findAll(req, res) {
     try {
@@ -53,17 +54,24 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+// Controlador de Especialidad
 async function findKinesiologosByEspecialidad(req, res) {
     try {
-        const id = Number.parseInt(req.params.id);
-        const especialidad = await em.findOne(Especialidad, { id }, { populate: ['Kinesiologos'] }); // Asegúrate de que 'kinesiologos' es el nombre correcto de la relación en tu entidad
-        if (!especialidad) {
-            return res.status(404).json({ message: 'Especialidad no encontrada' });
+        const especialidadId = Number(req.params.especialidadId);
+        const consultorioId = Number(req.params.consultorioId);
+        if (!especialidadId || !consultorioId) {
+            return res.status(400).json({ message: 'Debe proporcionar el ID de la especialidad y del consultorio' });
         }
-        res.status(200).json({ message: 'Kinesiólogos encontrados', data: especialidad.Kinesiologos });
+        const especialidad = await em.findOne(Especialidad, { id: especialidadId }, { populate: ['Kinesiologos'] });
+        const consultorio = await em.findOne(Consultorio, { id: consultorioId }, { populate: ['Kinesiologos'] });
+        if (!especialidad || !consultorio) {
+            return res.status(404).json({ message: 'Especialidad o consultorio no encontrado' });
+        }
+        const kinesiologos = especialidad.Kinesiologos.filter((kinesiologo) => consultorio.Kinesiologos.contains(kinesiologo));
+        res.status(200).json({ message: 'Kinesiólogos encontrados', data: kinesiologos });
     }
     catch (error) {
-        res.status(500).json({ message: 'Error al obtener kinesiólogos', error });
+        res.status(500).json({ message: 'Error al obtener kinesiólogos', error: error.message });
     }
 }
 export { findAll, findOne, add, update, remove, findKinesiologosByEspecialidad };

@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { sanitizedInput, findAll, findOne, add, update, remove } from './dispo.controller.js';
+import { sanitizedInput, findAll, findOne, add, update, remove, checkDisponibilidad } from './dispo.controller.js';
 import { validateDispo } from './dispo.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';
 const dispoRouter = Router();
+dispoRouter.get('/:fecha/:kinesiologoId/disponibilidad', checkDisponibilidad);
 dispoRouter.get('/', findAll);
 dispoRouter.get('/:id', findOne);
 dispoRouter.post('/', validateDispo, validarErrores, sanitizedInput, add);

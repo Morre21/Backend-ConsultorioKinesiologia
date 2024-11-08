@@ -1,6 +1,8 @@
 import { Disponibilidad } from './dispo.enitity.js';
 import { orm } from '../shared/db/orm.js';
 import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
+import { Turno } from '../turnos/turno.entity.js';
+import { parseISO, startOfDay } from 'date-fns';
 const em = orm.em;
 function sanitizedInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -79,5 +81,65 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizedInput, findAll, findOne, add, update, remove };
+async function checkDisponibilidad(req, res) {
+    try {
+        const kinesiologoId = Number(req.params.kinesiologoId);
+        const fecha = startOfDay(parseISO(req.params.fecha)); // Convierte la fecha a las 00:00 en UTC    
+        const diaSemana = fecha.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
+        if (!fecha || !kinesiologoId) {
+            return res.status(400).json({ error: 'Debe proporcionar fecha y kinesiologoId' });
+        }
+        // Obtener las disponibilidades del kinesiólogo para el día seleccionado
+        const disponibilidades = await em.find(Disponibilidad, {
+            kinesiologo: kinesiologoId,
+            diaSemana: diaSemana,
+            fechaDesde: { $lte: fecha },
+        });
+        if (disponibilidades.length === 0) {
+            return res.json({
+                message: 'No hay disponibilidad para la fecha seleccionada',
+                horariosDisponibles: [],
+            });
+        }
+        // Obtener los turnos ya registrados para el kinesiólogo en la fecha seleccionada
+        const turnosRegistrados = await em.find(Turno, {
+            kinesiologo: kinesiologoId,
+            fecha: fecha,
+        });
+        // Crear un array con los horarios ocupados para búsqueda eficiente
+        const horariosOcupados = turnosRegistrados.map((turno) => turno.hora);
+        // Generar los horarios disponibles
+        const horariosDisponibles = disponibilidades
+            .flatMap((disponibilidad) => {
+            const horaInicio = parseInt(disponibilidad.horaInicio.split(':')[0]);
+            const horaFin = parseInt(disponibilidad.horaFin.split(':')[0]);
+            // Crear un array de horarios posibles para cada disponibilidad
+            const horarios = [];
+            for (let hora = horaInicio; hora < horaFin; hora++) {
+                const horario = `${hora.toString().padStart(2, '0')}:00`;
+                horarios.push(horario);
+            }
+            return horarios;
+        })
+            .filter((horario) => !horariosOcupados.includes(horario));
+        if (horariosDisponibles.length === 0) {
+            return res.json({
+                message: 'No hay horarios disponibles para la fecha seleccionada',
+                horariosDisponibles: [],
+            });
+        }
+        return res.json({
+            horariosDisponibles: horariosDisponibles.sort(),
+            intervalos: disponibilidades.map((d) => ({
+                diaSemana: d.diaSemana,
+                horaInicio: d.horaInicio,
+                horaFin: d.horaFin,
+            })),
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+export { sanitizedInput, findAll, findOne, add, update, remove, checkDisponibilidad };
 //# sourceMappingURL=dispo.controller.js.map
