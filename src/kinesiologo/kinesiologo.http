@@ -22,7 +22,7 @@ Content-Type: application/json
 ### POST a kinesiologo
 POST http://localhost:3000/api/kinesiologos
 Content-Type: application/json
-
+/*
 {
 
     "matricula":"541777092111",
@@ -33,9 +33,20 @@ Content-Type: application/json
     "telefono": 341777999 ,
     "dni": 44666999,
     "especialidad": "Deportología",
+    "consultorio": "kineSport"
+}
+*/
+{
+    "matricula":"54199999999",
+    "nombre": "Facundo",
+    "apellido": "Morresi",
+    "email": "facumorresi21@gmail.com",
+    "password": "sanPeDRO534",
+    "telefono": 341777111 ,
+    "dni": 43491793,
+    "especialidad": "Deportología",
     "consultorio": "Musculito"
 }
-
 
 ### ID
 @id = {{createKinesiologo.response.body.data.id}}
