@@ -145,6 +145,21 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
+async function obtenerPaciente(req: Request, res: Response) {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+
+  try {
+    const paciente = await em.findOneOrFail(Paciente, { id: userId });
+    res.status(200).json({ message: 'paciente encontrado', data: paciente });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function add(req: Request, res: Response) {
   try {
     // Verificar si el paciente ya existe
@@ -176,10 +191,13 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const paciente = em.getReference(Paciente, id);
-    em.assign(paciente, req.body.sanitizedInput);
+    const pacienteToUpdate = await em.findOneOrFail(Paciente, { id });
+    em.assign(pacienteToUpdate, req.body.sanitizedInput);
     await em.flush();
-    res.status(200).json({ message: 'Paciente modificado exitosamente' });
+    res.status(200).json({
+      message: 'Paciente modificado exitosamente',
+      data: pacienteToUpdate,
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -204,5 +222,6 @@ export {
   remove,
   login,
   logout,
-  obtenerTurnos
+  obtenerTurnos,
+  obtenerPaciente
 };

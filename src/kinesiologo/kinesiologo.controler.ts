@@ -162,6 +162,28 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
+async function obtenerKinesiologo(req: Request, res: Response) {
+  const userId = req.user?.id;
+/*  const Nombre = req.user?.nombre;
+  const Apellido = req.user?.apellido;
+  const Dni = req.user?.dni;
+  const Email = req.user?.email;
+  const Telefono = req.user?.telefono;
+  const Matricula = req.user?.matricula;
+  */
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+
+  try {
+    const kinesiologo = await em.findOneOrFail(Kinesiologo, { id: userId },{ populate: ['consultorio', 'especialidad'] });
+    res.status(200).json({ message: 'Kinesiologo encontrado', data: kinesiologo });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function add(req: Request, res: Response) {
   try {
     // Verificar si el Kinesiologo ya existe
@@ -265,6 +287,7 @@ export {
   sanitizeKinesiologoInput,
   findAll,
   findOne,
+  obtenerKinesiologo,
   add,
   update,
   remove,

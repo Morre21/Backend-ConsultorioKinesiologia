@@ -121,6 +121,19 @@ async function findOne(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+async function obtenerPaciente(req, res) {
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+    try {
+        const paciente = await em.findOneOrFail(Paciente, { id: userId });
+        res.status(200).json({ message: 'paciente encontrado', data: paciente });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 async function add(req, res) {
     try {
         // Verificar si el paciente ya existe
@@ -148,10 +161,13 @@ async function add(req, res) {
 async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const paciente = em.getReference(Paciente, id);
-        em.assign(paciente, req.body.sanitizedInput);
+        const pacienteToUpdate = await em.findOneOrFail(Paciente, { id });
+        em.assign(pacienteToUpdate, req.body.sanitizedInput);
         await em.flush();
-        res.status(200).json({ message: 'Paciente modificado exitosamente' });
+        res.status(200).json({
+            message: 'Paciente modificado exitosamente',
+            data: pacienteToUpdate,
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -168,5 +184,5 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizePacienteInput, findAll, findOne, add, update, remove, login, logout, obtenerTurnos };
+export { sanitizePacienteInput, findAll, findOne, add, update, remove, login, logout, obtenerTurnos, obtenerPaciente };
 //# sourceMappingURL=paciente.controller.js.map

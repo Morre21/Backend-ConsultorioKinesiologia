@@ -10,9 +10,11 @@ import {
   sanitizePacienteInput,
   login,
   logout,
-  obtenerTurnos
+  obtenerTurnos,
+  obtenerPaciente
 } from './paciente.controller.js';
 import { validatePaciente } from './paciente.validator.js';
+import { validatePacienteUpdate } from './paciente.validator.update.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';
 import { authToken } from '../middlewares/authToken.js';
@@ -29,6 +31,7 @@ De esta manera no queda atada y podemos utilizar la ruta que necesitemos en app.
 */
 pacienteRouter.get('/', findAll);
 pacienteRouter.get('/:id', findOne);
+pacienteRouter.get('/k/:id', authToken, obtenerPaciente);
 pacienteRouter.post(
   '/',
   validatePaciente,
@@ -44,14 +47,25 @@ pacienteRouter.put(
   sanitizePacienteInput,
   update
 );
-pacienteRouter.patch(
+/*pacienteRouter.patch(
   '/:id',
   authToken,
   validatePaciente,
   validarErrores,
   sanitizePacienteInput,
   update
+);*/
+
+pacienteRouter.patch(
+  '/k/:id',
+  authToken,
+  validatePacienteUpdate,
+  validarErrores,
+  sanitizePacienteInput,
+  update
 );
+
+
 pacienteRouter.delete('/:id', authToken, remove);
 
 
