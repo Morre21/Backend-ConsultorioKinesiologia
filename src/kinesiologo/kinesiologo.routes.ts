@@ -9,7 +9,8 @@ import {
   remove,
   login,
   logout,
-  findKineByEspCon
+  findKineByEspCon,
+  findPorConsul,
 } from './kinesiologo.controler.js';
 import { validateKinesiologo } from './kinesiologo.validator.js';
 import { validateKinesiologoUpdate } from './kinesiologo.validator.update.js';
@@ -22,13 +23,13 @@ const kinesiologoRouter = Router();
 
 kinesiologoRouter.post('/login', login);
 kinesiologoRouter.get('/turnos', authToken, obtenerTurnosKinesiologo);
-
-// Acá definimos las rutas para cada método del controlador
+kinesiologoRouter.get('/consul', authToken, findPorConsul);
 kinesiologoRouter.get('/:especialidadId', authToken, findKineByEspCon);
 kinesiologoRouter.get('/:id', findOne);
 kinesiologoRouter.get('/k/:id', authToken, obtenerKinesiologo);
 kinesiologoRouter.post(
   '/',
+  authToken,
   validateKinesiologo,
   validarErrores,
   sanitizeKinesiologoInput,

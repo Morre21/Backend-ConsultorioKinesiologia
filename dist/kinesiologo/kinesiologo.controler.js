@@ -39,7 +39,11 @@ async function login(req, res) {
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Contraseña incorrecta' });
         }
-        const token = jwt.sign({ id: kinesiologo.id, nombre: kinesiologo.nombre, apellido: kinesiologo.apellido }, JWT_SECRET, {
+        const token = jwt.sign({
+            id: kinesiologo.id,
+            nombre: kinesiologo.nombre,
+            apellido: kinesiologo.apellido,
+        }, JWT_SECRET, {
             expiresIn: '1h',
         });
         // Establece el token en una cookie segura
@@ -69,7 +73,7 @@ async function obtenerTurnosKinesiologo(req, res) {
         // Encuentra los turnos del kinesiologo autenticado
         const turnos = await em.find(Turno, { kinesiologo: userId }, { populate: ['paciente'] });
         // Formatea la respuesta para cumplir con el formato JSON deseado
-        const turnosFormateados = turnos.map(turno => ({
+        const turnosFormateados = turnos.map((turno) => ({
             id: turno.id,
             fecha: turno.fecha.toISOString(),
             hora: turno.hora,
@@ -79,8 +83,8 @@ async function obtenerTurnosKinesiologo(req, res) {
             paciente: {
                 id: turno.paciente.id,
                 nombre: turno.paciente.nombre,
-                apellido: turno.paciente.apellido
-            } // ID del kinesiólogo
+                apellido: turno.paciente.apellido,
+            }, // ID del kinesiólogo
         }));
         res.status(200).json({
             userId,
@@ -161,22 +165,22 @@ async function add(req, res) {
         if (!especialidad) {
             return res.status(400).json({ message: 'Especialidad no encontrada' });
         }
-        // Buscar el ID del consultorio
+        // Obtener el consultorio ID desde el token
         const consultorio = await em.findOne(Consultorio, {
-            nombre: req.body.consultorio,
+            id: req.user.consultorioId,
         });
         if (!consultorio) {
             return res.status(400).json({ message: 'Consultorio no encontrado' });
         }
+        // Hash de la contraseña
         const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
-        // Asigno a la constante data el hash de la contraseña, Id de especialidad y Id de consultorio
+        // Preparar los datos del kinesiologo, incluyendo el consultorio asignado automáticamente
         const kinesiologoData = {
             ...req.body.sanitizedInput,
             consultorio: consultorio.id,
             especialidad: especialidad.id,
             password: hashedPassword,
         };
-        // Creo el kinesiologo pasandole como parametro la constante kinesiologoData
         const kinesiologo = em.create(Kinesiologo, kinesiologoData);
         await em.flush();
         res
@@ -205,8 +209,20 @@ async function update(req, res) {
 async function remove(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const kinesiologo = em.getReference(Kinesiologo, id);
+        const kinesiologo = await em.findOneOrFail(Kinesiologo, id, {
+            populate: ['turnos'],
+        });
+        // Verificar que si el kinesiologo tiene turnos activos no poder eliminarlo
+        const turnosActivos = kinesiologo.turnos
+            .getItems()
+            .some((turno) => turno.estado === 'activo');
+        if (turnosActivos) {
+            return res.status(400).json({
+                message: 'No se puede dar de baja al kinesiologo porque tiene turnos activos.',
+            });
+        }
         await em.removeAndFlush(kinesiologo);
+        res.status(200).json({ message: 'Kinesiologo eliminado con éxito' });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -223,9 +239,13 @@ async function findKineByEspCon(req, res) {
         // Encuentra los turnos del paciente autenticado
         const kinesiologos = await em.find(Kinesiologo, { consultorio, especialidad }, { populate: ['consultorio', 'especialidad'] });
         if (!especialidad || !consultorio) {
-            return res.status(404).json({ message: 'Especialidad o consultorio no encontrado' });
+            return res
+                .status(404)
+                .json({ message: 'Especialidad o consultorio no encontrado' });
         }
-        res.status(200).json({ message: 'Kinesiólogos encontrados', data: kinesiologos });
+        res
+            .status(200)
+            .json({ message: 'Kinesiólogos encontrados', data: kinesiologos });
     }
     catch (error) {
         return res.status(500).json({
@@ -234,5 +254,31 @@ async function findKineByEspCon(req, res) {
         });
     }
 }
-export { sanitizeKinesiologoInput, findAll, findOne, obtenerKinesiologo, add, update, remove, login, logout, obtenerTurnosKinesiologo, findKineByEspCon };
+async function findPorConsul(req, res) {
+    const consultorio = req.user?.consultorio;
+    if (!consultorio) {
+        return res.status(401).json({
+            message: 'Usuario no autenticado o consultorio no especificado',
+        });
+    }
+    try {
+        const kinesiologos = await em.find(Kinesiologo, { consultorio }, { populate: ['consultorio', 'especialidad'] });
+        if (!kinesiologos.length) {
+            return res
+                .status(404)
+                .json({ message: 'No se encontraron kinesiologos en el consultorio' });
+        }
+        res.status(200).json({
+            message: 'Kinesiologos encontrados',
+            data: kinesiologos,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: 'Error al obtener los kinesiologos',
+            error: error.message,
+        });
+    }
+}
+export { sanitizeKinesiologoInput, findAll, findOne, obtenerKinesiologo, add, update, remove, login, logout, obtenerTurnosKinesiologo, findKineByEspCon, findPorConsul, };
 //# sourceMappingURL=kinesiologo.controler.js.map

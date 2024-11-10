@@ -54,23 +54,26 @@ async function login(req: Request, res: Response) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign({ id: paciente.id, nombre: paciente.nombre, apellido: paciente.apellido }, JWT_SECRET, {
-      expiresIn: '1h',
-    });
+    const token = jwt.sign(
+      { id: paciente.id, nombre: paciente.nombre, apellido: paciente.apellido },
+      JWT_SECRET,
+      {
+        expiresIn: '1h',
+      }
+    );
 
-    // Establece el token en una cookie 
+    // Establece el token en una cookie
     res.cookie('token', token, {
       httpOnly: true, // El token solo puede ser accedido desde el servidor
       secure: process.env.NODE_ENV === 'production', // Solo en HTTPS en producción
       sameSite: 'strict', // Previene que el token sea enviado en requests cross-site
       maxAge: 3600000, // 1 hora
     });
-    
+
     res.status(200).json({
       message: 'Inicio de sesión exitoso',
       data: { email: paciente.email },
     });
-
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -87,10 +90,14 @@ async function obtenerTurnos(req: Request, res: Response) {
 
   try {
     // Encuentra los turnos del paciente autenticado
-    const turnos = await em.find(Turno, { paciente: userId },{ populate: ['kinesiologo']});
+    const turnos = await em.find(
+      Turno,
+      { paciente: userId },
+      { populate: ['kinesiologo'] }
+    );
 
     // Formatea la respuesta para cumplir con el formato JSON deseado
-    const turnosFormateados = turnos.map(turno => ({
+    const turnosFormateados = turnos.map((turno) => ({
       id: turno.id,
       fecha: turno.fecha.toISOString(), // Asegura que la fecha esté en formato ISO
       hora: turno.hora, // Suponiendo que `hora` ya es una string en el formato deseado
@@ -100,15 +107,15 @@ async function obtenerTurnos(req: Request, res: Response) {
       kinesiologo: {
         id: turno.kinesiologo.id,
         nombre: turno.kinesiologo.nombre,
-        apellido: turno.kinesiologo.apellido
-      } // ID del kinesiólogo
+        apellido: turno.kinesiologo.apellido,
+      }, // ID del kinesiólogo
     }));
 
     res.status(200).json({
       userId,
       nombre,
       apellido,
-      turnos: turnosFormateados, // Incluye los turnos formateados en la respuesta
+      turnos: turnosFormateados,
     });
   } catch (error: any) {
     return res.status(500).json({
