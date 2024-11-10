@@ -40,7 +40,7 @@ async function login(req, res) {
         const token = jwt.sign({ id: paciente.id, nombre: paciente.nombre, apellido: paciente.apellido }, JWT_SECRET, {
             expiresIn: '1h',
         });
-        // Establece el token en una cookie 
+        // Establece el token en una cookie
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -67,7 +67,7 @@ async function obtenerTurnos(req, res) {
         // Encuentra los turnos del paciente autenticado
         const turnos = await em.find(Turno, { paciente: userId }, { populate: ['kinesiologo'] });
         // Formatea la respuesta para cumplir con el formato JSON deseado
-        const turnosFormateados = turnos.map(turno => ({
+        const turnosFormateados = turnos.map((turno) => ({
             id: turno.id,
             fecha: turno.fecha.toISOString(),
             hora: turno.hora,
@@ -77,14 +77,14 @@ async function obtenerTurnos(req, res) {
             kinesiologo: {
                 id: turno.kinesiologo.id,
                 nombre: turno.kinesiologo.nombre,
-                apellido: turno.kinesiologo.apellido
-            } // ID del kinesiólogo
+                apellido: turno.kinesiologo.apellido,
+            }, // ID del kinesiólogo
         }));
         res.status(200).json({
             userId,
             nombre,
             apellido,
-            turnos: turnosFormateados, // Incluye los turnos formateados en la respuesta
+            turnos: turnosFormateados,
         });
     }
     catch (error) {
