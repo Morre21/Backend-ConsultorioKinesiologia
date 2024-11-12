@@ -83,8 +83,9 @@ async function obtenerTurnosKine(req, res) {
         return res.status(401).json({ message: 'Usuario no autenticado' });
     }
     try {
+        const ahora = new Date(); // Fecha y hora actual
         // Encuentra los turnos pendientes
-        const turnos = await em.find(Turno, { kinesiologo: Number(req.params.kineId), estado: "Activo" }, { populate: ['paciente'] });
+        const turnos = await em.find(Turno, { kinesiologo: Number(req.params.kineId), estado: "Activo", fecha: { $gt: ahora }, }, { populate: ['paciente'] });
         // Formatea la respuesta para cumplir con el formato JSON deseado
         const turnosFormateados = turnos.map((turno) => ({
             id: turno.id,

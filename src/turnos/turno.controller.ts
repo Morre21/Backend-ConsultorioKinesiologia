@@ -96,10 +96,12 @@ async function obtenerTurnosKine(req: Request, res: Response) {
     }
   
     try {
+        const ahora = new Date(); // Fecha y hora actual
+        
       // Encuentra los turnos pendientes
       const turnos = await em.find(
         Turno,
-        { kinesiologo: Number(req.params.kineId), estado:"Activo"},
+        { kinesiologo: Number(req.params.kineId), estado:"Activo",fecha: { $gt: ahora }, },
         { populate: ['paciente'] }
       );
   
