@@ -1,24 +1,30 @@
-import {body} from 'express-validator'
+import { body } from 'express-validator';
 import { Kinesiologo } from '../kinesiologo/kinesiologo.entity.js';
-import { orm } from '../shared/db/orm.js'
+import { orm } from '../shared/db/orm.js';
 
-const em = orm.em; 
+const em = orm.em;
 
-
-export const validateDispo= [
-  body('fechaDesde')
+export const validateDispo = [
+  /*body('fechaDesde')
     .isDate()
     .withMessage('La fecha es obligatoria y debe ser una fecha válida.')
     .notEmpty()
     .withMessage('La fecha es obligatoria.'),
-
+*/
   body('diaSemana')
     .isString()
     .withMessage('El día debe ser una cadena de texto.')
     .notEmpty()
     .withMessage('El día es obligatorio.')
     .custom((value) => {
-      const diasValidos = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+      const diasValidos = [
+        'lunes',
+        'martes',
+        'miércoles',
+        'jueves',
+        'viernes',
+        'sábado',
+      ];
       const diaLowerCase = value.toLowerCase().trim();
       if (!diasValidos.includes(diaLowerCase)) {
         throw new Error('El día de la semana no es válido.');
@@ -36,8 +42,17 @@ export const validateDispo= [
     .withMessage('La hora de inicio es obligatoria.')
     .custom((value) => {
       const [hours, minutes] = value.split(':').map(Number);
-      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-        throw new Error('La hora de inicio debe estar en formato HH:mm y ser válida.');
+      if (
+        isNaN(hours) ||
+        isNaN(minutes) ||
+        hours < 0 ||
+        hours > 23 ||
+        minutes < 0 ||
+        minutes > 59
+      ) {
+        throw new Error(
+          'La hora de inicio debe estar en formato HH:mm y ser válida.'
+        );
       }
       return true;
     }),
@@ -46,12 +61,21 @@ export const validateDispo= [
     .withMessage('La hora de fin es obligatoria.')
     .custom((value) => {
       const [hours, minutes] = value.split(':').map(Number);
-      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-        throw new Error('La hora de fin debe estar en formato HH:mm y ser válida.');
+      if (
+        isNaN(hours) ||
+        isNaN(minutes) ||
+        hours < 0 ||
+        hours > 23 ||
+        minutes < 0 ||
+        minutes > 59
+      ) {
+        throw new Error(
+          'La hora de fin debe estar en formato HH:mm y ser válida.'
+        );
       }
       return true;
     }),
-  body('kinesiologo')
+  /* body('kinesiologo')
     .isString()
     .withMessage('La matrícula del kinesiólogo debe ser una cadena de texto.')
     .notEmpty()
@@ -71,7 +95,7 @@ export const validateDispo= [
       }
       return true;
     }),
-
+*/
   // Validación adicional para asegurar que horaFin sea posterior a horaInicio
   body().custom((value) => {
     const { horaInicio, horaFin } = value;
@@ -79,9 +103,11 @@ export const validateDispo= [
       const inicio = new Date(`1970-01-01T${horaInicio}`);
       const fin = new Date(`1970-01-01T${horaFin}`);
       if (fin <= inicio) {
-        throw new Error('La hora de fin debe ser posterior a la hora de inicio.');
+        throw new Error(
+          'La hora de fin debe ser posterior a la hora de inicio.'
+        );
       }
     }
     return true;
-  })
-];  
+  }),
+];

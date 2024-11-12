@@ -22,7 +22,10 @@ function sanitizedInput(req, res, next) {
 async function findAll(req, res) {
     try {
         const disponibilidad = await em.find(Disponibilidad, {}, { populate: ['kinesiologo'] });
-        res.status(200).json({ message: 'Todas las disponibilidades fueron encontradas', data: disponibilidad });
+        res.status(200).json({
+            message: 'Todas las disponibilidades fueron encontradas',
+            data: disponibilidad,
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -32,7 +35,10 @@ async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const disponibilidad = await em.findOneOrFail(Disponibilidad, { id }, { populate: ['kinesiologo'] });
-        res.status(200).json({ message: 'Disponibilidad encontrada con exito', data: disponibilidad });
+        res.status(200).json({
+            message: 'Disponibilidad encontrada con exito',
+            data: disponibilidad,
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -41,18 +47,23 @@ async function findOne(req, res) {
 async function add(req, res) {
     try {
         // Primero, busca el kinesiólogo por su matrícula
-        const kinesiologo = await em.findOne(Kinesiologo, { matricula: req.body.sanitizedInput.kinesiologo });
+        const kinesiologo = await em.findOne(Kinesiologo, {
+            matricula: req.body.sanitizedInput.kinesiologo,
+        });
         if (!kinesiologo) {
             return res.status(404).json({ message: 'Kinesiólogo no encontrado' });
         }
         // Crea un nuevo objeto con los datos de disponibilidad, reemplazando kinesiologo con la referencia encontrada
         const disponibilidadData = {
             ...req.body.sanitizedInput,
-            kinesiologo: kinesiologo
+            kinesiologo: kinesiologo,
         };
         const disponibilidad = em.create(Disponibilidad, disponibilidadData);
         await em.flush();
-        res.status(201).json({ message: 'Disponibilidad creada exitosamente', data: disponibilidad });
+        res.status(201).json({
+            message: 'Disponibilidad creada exitosamente',
+            data: disponibilidad,
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -61,7 +72,9 @@ async function add(req, res) {
 async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const disponibilidadToUpdate = await em.findOneOrFail(Disponibilidad, { id });
+        const disponibilidadToUpdate = await em.findOneOrFail(Disponibilidad, {
+            id,
+        });
         em.assign(disponibilidadToUpdate, req.body.sanitizedInput);
         await em.flush();
         res.status(200).json({ message: 'Disponibilidad modificada exitosamente' });
@@ -84,10 +97,14 @@ async function remove(req, res) {
 async function checkDisponibilidad(req, res) {
     try {
         const kinesiologoId = Number(req.params.kinesiologoId);
-        const fecha = startOfDay(parseISO(req.params.fecha)); // Convierte la fecha a las 00:00 en UTC    
-        const diaSemana = fecha.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
+        const fecha = startOfDay(parseISO(req.params.fecha)); // Convierte la fecha a las 00:00 en UTC
+        const diaSemana = fecha
+            .toLocaleDateString('es-ES', { weekday: 'long' })
+            .toLowerCase();
         if (!fecha || !kinesiologoId) {
-            return res.status(400).json({ error: 'Debe proporcionar fecha y kinesiologoId' });
+            return res
+                .status(400)
+                .json({ error: 'Debe proporcionar fecha y kinesiologoId' });
         }
         // Obtener las disponibilidades del kinesiólogo para el día seleccionado
         const disponibilidades = await em.find(Disponibilidad, {
@@ -141,5 +158,32 @@ async function checkDisponibilidad(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizedInput, findAll, findOne, add, update, remove, checkDisponibilidad };
+async function findPorKine(req, res) {
+    const kinesiologoId = parseInt(req.params.id);
+    try {
+        const kinesiologo = await em.findOne(Kinesiologo, { id: kinesiologoId });
+        if (!kinesiologo) {
+            return res.status(404).json({ message: 'Kinesiologo no encontrado' });
+        }
+        const disponibilidades = await em.find(Disponibilidad, {
+            kinesiologo: { id: kinesiologoId },
+        });
+        if (disponibilidades.length === 0) {
+            return res.status(404).json({
+                message: 'No se encontraron disponibilidades para este kinesiologo',
+            });
+        }
+        res.status(200).json({
+            message: 'Disponibilidades encontradas',
+            data: disponibilidades,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: 'Error al obtener las disponibilidades',
+            error: error.message,
+        });
+    }
+}
+export { sanitizedInput, findPorKine, findAll, findOne, add, update, remove, checkDisponibilidad, };
 //# sourceMappingURL=dispo.controller.js.map
