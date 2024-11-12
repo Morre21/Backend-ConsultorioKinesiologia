@@ -88,6 +88,19 @@ async function findOne(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+async function obtenerSecretaria(req, res) {
+    const userId = req.user?.id;
+    if (!userId) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+    try {
+        const secretaria = await em.findOneOrFail(Secretaria, { id: userId }, { populate: ['consultorio'] });
+        res.status(200).json({ message: 'Secretaria encontrada', data: secretaria });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 async function add(req, res) {
     try {
         // Verificar si el Secretaria ya existe
@@ -139,5 +152,5 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizeSecretariaInput, findAll, findOne, add, update, remove, login, logout, };
+export { sanitizeSecretariaInput, findAll, findOne, obtenerSecretaria, add, update, remove, login, logout, };
 //# sourceMappingURL=secretaria.controler.js.map
