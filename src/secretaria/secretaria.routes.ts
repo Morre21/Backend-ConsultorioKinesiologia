@@ -3,6 +3,7 @@ import {
   sanitizeSecretariaInput,
   findAll,
   findOne,
+  obtenerSecretaria,
   add,
   update,
   remove,
@@ -14,11 +15,23 @@ import { validarErrores } from '../middlewares/validacionErrores.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';
 import { Request, Response, NextFunction } from 'express';
 import { authToken } from '../middlewares/authToken.js';
+import { validateSecretariaUpdate } from './secretaria.validator.update.js';
 
 const secretariaRouter = Router();
 
 secretariaRouter.get('/', findAll);
 secretariaRouter.get('/:id', findOne);
+
+secretariaRouter.get('/k/:id', authToken, obtenerSecretaria);
+secretariaRouter.patch(
+  '/k/:id',
+  authToken,
+  validateSecretariaUpdate,
+  validarErrores,
+  sanitizeSecretariaInput,
+  update
+);
+
 secretariaRouter.post(
   '/',
   validateSecretaria,
