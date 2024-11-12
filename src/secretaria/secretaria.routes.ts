@@ -4,6 +4,7 @@ import {
   findAll,
   findOne,
   obtenerSecretaria,
+  consultorioDeSecretariaLogueada,
   add,
   update,
   remove,
@@ -22,6 +23,7 @@ const secretariaRouter = Router();
 secretariaRouter.get('/', findAll);
 secretariaRouter.get('/:id', findOne);
 
+secretariaRouter.get('/consultorio-logueada', authToken, consultorioDeSecretariaLogueada);
 secretariaRouter.get('/k/:id', authToken, obtenerSecretaria);
 secretariaRouter.patch(
   '/k/:id',

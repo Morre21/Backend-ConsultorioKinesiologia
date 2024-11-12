@@ -37,14 +37,16 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const especialidad = em.create(Especialidad, req.body);
+    const { nombre } = req.body;
+    const estado = true; // Siempre 'Activo'
+
+    const especialidad = em.create(Especialidad, { nombre, estado });
     await em.flush();
-    res
-      .status(201)
-      .json({
-        message: 'Especialidad creada exitosamente',
-        data: especialidad,
-      });
+
+    res.status(201).json({
+      message: 'Especialidad creada exitosamente',
+      data: especialidad,
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

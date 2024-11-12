@@ -7,7 +7,7 @@ import { Precio } from "../precio/precio.entity.js";
 export class Especialidad extends BaseEntity{
   @Property({ nullable:false })
   nombre !: string
-  @Property({ nullable:false })
+  @Property({ nullable:false, default:true })
   estado !: boolean
   @OneToMany(() => Kinesiologo, (kinesiologo) => kinesiologo.especialidad, {
     cascade: [Cascade.ALL],

@@ -58,29 +58,36 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    // Primero, busca el kinesiólogo por su matrícula
-    const kinesiologo = await em.findOne(Kinesiologo, {
-      matricula: req.body.sanitizedInput.kinesiologo,
-    });
+    const {
+      diaSemana,
+      horaInicio,
+      horaFin,
+      kinesiologo: kinesiologoId,
+    } = req.body.sanitizedInput;
 
+    // Verifica que el kinesiólogo exista
+    const kinesiologo = await em.findOne(Kinesiologo, { id: kinesiologoId });
     if (!kinesiologo) {
       return res.status(404).json({ message: 'Kinesiólogo no encontrado' });
     }
 
-    // Crea un nuevo objeto con los datos de disponibilidad, reemplazando kinesiologo con la referencia encontrada
-    const disponibilidadData = {
-      ...req.body.sanitizedInput,
-      kinesiologo: kinesiologo,
-    };
+    // Crea el registro de disponibilidad
+    const disponibilidad = em.create(Disponibilidad, {
+      fechaDesde: new Date(), // or any appropriate date value
+      diaSemana,
+      horaInicio,
+      horaFin,
+      kinesiologo,
+    });
 
-    const disponibilidad = em.create(Disponibilidad, disponibilidadData);
-    await em.flush();
+    await em.persistAndFlush(disponibilidad);
     res.status(201).json({
       message: 'Disponibilidad creada exitosamente',
       data: disponibilidad,
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al crear disponibilidad:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
 }
 

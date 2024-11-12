@@ -33,11 +33,11 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
-        const especialidad = em.create(Especialidad, req.body);
+        const { nombre } = req.body;
+        const estado = true; // Siempre 'Activo'
+        const especialidad = em.create(Especialidad, { nombre, estado });
         await em.flush();
-        res
-            .status(201)
-            .json({
+        res.status(201).json({
             message: 'Especialidad creada exitosamente',
             data: especialidad,
         });

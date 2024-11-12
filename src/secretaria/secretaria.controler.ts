@@ -138,6 +138,21 @@ async function obtenerSecretaria(req: Request, res: Response) {
   }
 }
 
+async function consultorioDeSecretariaLogueada(req: Request, res: Response) {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+
+  try {
+    const secretaria = await em.findOneOrFail(Secretaria, { id: userId }, { populate: ['consultorio'] });
+    res.status(200).json({ message: 'Consultorio obtenido', consultorio: secretaria.consultorio });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function add(req: Request, res: Response) {
   try {
     // Verificar si el Secretaria ya existe
@@ -197,6 +212,7 @@ export {
   findAll,
   findOne,
   obtenerSecretaria,
+  consultorioDeSecretariaLogueada,
   add,
   update,
   remove,
