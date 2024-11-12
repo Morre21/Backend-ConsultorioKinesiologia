@@ -134,25 +134,47 @@ async function obtenerPaciente(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+// Función para capitalizar la primera letra de una cadena
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
 async function add(req, res) {
     try {
+        const dni = Number(req.body.sanitizedInput.dni);
         // Verificar si el paciente ya existe
-        const existingPaciente = await em.findOne(Paciente, {
-            dni: req.body.sanitizedInput.dni,
-        });
+        const existingPaciente = await em.findOne(Paciente, { dni });
         if (existingPaciente) {
             return res.status(400).json({ message: 'El paciente ya existe' });
         }
         const hashedPassword = await hashPassword(req.body.sanitizedInput.password);
+        // Capitalizar nombre y apellido
+        const nombre = capitalizeFirstLetter(req.body.sanitizedInput.nombre);
+        const apellido = capitalizeFirstLetter(req.body.sanitizedInput.apellido);
+        const obraSocial = req.body.sanitizedInput.obraSocial.toUpperCase();
         const PacienteData = {
             ...req.body.sanitizedInput,
+            dni,
             password: hashedPassword,
+            obraSocial,
+            nombre,
+            apellido,
+            estado: 'Activo',
         };
         const paciente = em.create(Paciente, PacienteData);
         await em.flush();
-        res
-            .status(201)
-            .json({ message: 'Paciente creado exitosamente', data: paciente });
+        // Generar token JWT
+        const token = jwt.sign({ id: paciente.id, nombre: paciente.nombre, apellido: paciente.apellido }, JWT_SECRET, { expiresIn: '1h' });
+        // Establecer el token en una cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 3600000, // 1 hora
+        });
+        res.status(201).json({
+            message: 'Paciente creado exitosamente',
+            data: paciente,
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

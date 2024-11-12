@@ -38,7 +38,7 @@ __decorate([
 ], Paciente.prototype, "email", void 0);
 __decorate([
     Property({ nullable: false }),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], Paciente.prototype, "telefono", void 0);
 __decorate([
     Property({ nullable: false }),

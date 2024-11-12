@@ -37,7 +37,8 @@ pacienteRouter.post(
   validatePaciente,
   validarErrores,
   sanitizePacienteInput,
-  add
+  add,
+  login,
 );
 pacienteRouter.put(
   '/:id',

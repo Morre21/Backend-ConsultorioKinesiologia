@@ -20,7 +20,7 @@ export class Paciente extends BaseEntity {
      email!:string
 
     @Property({ nullable: false })
-     telefono!:number
+     telefono!: string
 
      @Property({ nullable: false })
      password!: string

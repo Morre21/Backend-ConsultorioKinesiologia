@@ -15,7 +15,7 @@ De esta manera no queda atada y podemos utilizar la ruta que necesitemos en app.
 pacienteRouter.get('/', findAll);
 pacienteRouter.get('/:id', findOne);
 pacienteRouter.get('/k/:id', authToken, obtenerPaciente);
-pacienteRouter.post('/', validatePaciente, validarErrores, sanitizePacienteInput, add);
+pacienteRouter.post('/', validatePaciente, validarErrores, sanitizePacienteInput, add, login);
 pacienteRouter.put('/:id', authToken, validatePaciente, validarErrores, sanitizePacienteInput, update);
 /*pacienteRouter.patch(
   '/:id',
