@@ -159,7 +159,7 @@ async function checkDisponibilidad(req, res) {
     }
 }
 async function findPorKine(req, res) {
-    const kinesiologoId = parseInt(req.params.id);
+    const kinesiologoId = parseInt(req.params.kineId);
     try {
         const kinesiologo = await em.findOne(Kinesiologo, { id: kinesiologoId });
         if (!kinesiologo) {

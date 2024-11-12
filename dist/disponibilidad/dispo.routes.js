@@ -3,16 +3,16 @@ import { sanitizedInput, findAll, findOne, add, update, remove, checkDisponibili
 import { validateDispo } from './dispo.validator.js';
 import { validarErrores } from '../middlewares/validacionErrores.js';
 import { manejoErrores } from '../middlewares/manejoErrores.js';
+import { authToken } from '../middlewares/authToken.js';
 const dispoRouter = Router();
 dispoRouter.get('/:fecha/:kinesiologoId/disponibilidad', checkDisponibilidad);
+dispoRouter.get('/dispo/:kineId', authToken, findPorKine);
 dispoRouter.get('/', findAll);
 dispoRouter.get('/:id', findOne);
-dispoRouter.get('/:kineId', authToken, findPorKine);
 dispoRouter.post('/', validateDispo, validarErrores, sanitizedInput, add);
 dispoRouter.put('/:id', validateDispo, validarErrores, sanitizedInput, update);
 dispoRouter.patch('/:id', validateDispo, validarErrores, sanitizedInput, update);
 dispoRouter.delete('/:id', remove);
-import { authToken } from '../middlewares/authToken.js';
 dispoRouter.use((err, req, res, next) => {
     manejoErrores(err, req, res, next);
 });

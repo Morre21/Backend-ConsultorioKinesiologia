@@ -87,6 +87,48 @@ async function remove(req: Request, res: Response): Promise<void>  {
     }
 }
 
+
+async function obtenerTurnosKine(req: Request, res: Response) {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+  
+    try {
+      // Encuentra los turnos pendientes
+      const turnos = await em.find(
+        Turno,
+        { kinesiologo: Number(req.params.kineId), estado:"Activo"},
+        { populate: ['paciente'] }
+      );
+  
+      // Formatea la respuesta para cumplir con el formato JSON deseado
+      const turnosFormateados = turnos.map((turno) => ({
+        id: turno.id,
+        fecha: turno.fecha.toISOString(), // Asegura que la fecha esté en formato ISO
+        hora: turno.hora, // Suponiendo que `hora` ya es una string en el formato deseado
+        estado: turno.estado,
+        importeTotal: turno.importeTotal,
+        kinesiologo: turno.kinesiologo.id,
+        paciente: {
+          id: turno.paciente.id,
+          nombre: turno.paciente.nombre,
+          apellido: turno.paciente.apellido,
+        },
+      }));
+  
+      res.status(200).json({
+        turnos: turnosFormateados,
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        message: 'Error al obtener los turnos',
+        error: error.message,
+      });
+    }
+  }
+
 async function creacionTurno(req:Request, res:Response){
     try{
         const especialidad=Number.parseInt(req.body.especialidadId)
@@ -124,4 +166,4 @@ async function creacionTurno(req:Request, res:Response){
     }
 }
 
-export {sanitizeTurnoInput, findAll, findOne, add, update, remove, creacionTurno}; 
+export {sanitizeTurnoInput, findAll, findOne, add, update, remove, creacionTurno, obtenerTurnosKine}; 
