@@ -43,6 +43,7 @@ async function login(req, res) {
             id: kinesiologo.id,
             nombre: kinesiologo.nombre,
             apellido: kinesiologo.apellido,
+            role: 'K' // role de kinesiologo: 'K'
         }, JWT_SECRET, {
             expiresIn: '1h',
         });
@@ -160,14 +161,14 @@ async function add(req, res) {
         }
         // Buscar el ID de la especialidad
         const especialidad = await em.findOne(Especialidad, {
-            nombre: req.body.especialidad,
+            id: req.body.especialidad,
         });
         if (!especialidad) {
             return res.status(400).json({ message: 'Especialidad no encontrada' });
         }
         // Obtener el consultorio ID desde el token
         const consultorio = await em.findOne(Consultorio, {
-            id: req.user.consultorioId,
+            id: req.body.consultorio,
         });
         if (!consultorio) {
             return res.status(400).json({ message: 'Consultorio no encontrado' });
